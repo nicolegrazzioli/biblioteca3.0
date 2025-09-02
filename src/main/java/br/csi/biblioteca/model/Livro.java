@@ -20,8 +20,14 @@ public class Livro {
     private String isbn_liv;
     @NonNull
     private int ano_publicacao_liv;
-    @NonNull
-    private int id_autor_liv;
+
+//    @NonNull
+//    private int id_autor_liv;
+    // mapeia relacionamento com autor
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_autor_liv")
+    private Autor autor_liv;
+
     @NonNull
     private boolean disponivel_liv;
     @NonNull

@@ -1,0 +1,476 @@
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\.mvn\wrapper\maven-wrapper.properties:
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.11/apache-maven-3.9.11-bin.zip
+
+
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\BibliotecaApplication.java:
+package br.csi.biblioteca;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BibliotecaApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BibliotecaApplication.class, args);
+	}
+
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\AutorController.java:
+package br.csi.biblioteca.controller;
+
+import br.csi.biblioteca.model.Autor;
+import br.csi.biblioteca.service.AutorService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/autores")
+public class AutorController {
+    private AutorService service;
+    public AutorController(AutorService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/listar")
+    public List<Autor> listar() {
+        return this.service.listar();
+    }
+
+    @GetMapping("/{id}")
+    public Autor autor(@PathVariable Integer id) {
+        return this.service.getAutor(id);
+    }
+
+    @PostMapping
+    public void salvar(@RequestBody Autor autor) {
+        this.service.salvar(autor);
+    }
+
+    @PutMapping
+    public void atualizar(@RequestBody Autor autor) {
+        this.service.atualizar(autor);
+    }
+
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable Integer id) {
+        this.service.excluir(id);
+    }
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Autor.java:
+package br.csi.biblioteca.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+@Entity
+@Table(name = "autor")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class Autor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_aut;
+    @NonNull
+    private String nome_aut;
+    @NonNull
+    private String nacionalidade_aut;
+    @NonNull
+    private String data_nascimento_aut;
+
+    public void setData_nascimento_aut(String data_nascimento_aut) {
+        try {
+            LocalDate date = LocalDate.parse(data_nascimento_aut);
+            this.data_nascimento_aut = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Formato de saída inválido. Use AAAA-MM-DD");
+        }
+    }
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\AutorRepository.java:
+package br.csi.biblioteca.model;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AutorRepository extends JpaRepository<Autor, Integer> {
+
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Emprestimo.java:
+package br.csi.biblioteca.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.sql.Date;
+
+@Entity
+@Table(name = "emprestimo")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class Emprestimo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_emp;
+
+//    @NonNull
+//    private int id_livro_emp;
+    //mapeia relacionamento com livro
+    @ManyToOne
+    @JoinColumn(name = "id_livro_emp")
+    private Livro livro_emp;
+
+//    @NonNull
+//    private int id_usuario_emp;
+    //mapeia relacionamento com usuario
+    @ManyToOne
+    @JoinColumn(name = "id_usuario_emp")
+    private Usuario usuario_emp;
+
+    @NonNull
+    private Date data_emprestimo_emp;
+    @NonNull
+    private Date data_devolucao_prevista_emp;
+
+    private Date data_devolucao_efetiva_emp;
+    @NonNull
+    private String status_emp;
+
+    //extras - para exibir - acessado pelos relacionamentos
+//    @NonNull
+//    private String titulo_livro;
+//    @NonNull
+//    private String nome_usuario;
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Livro.java:
+package br.csi.biblioteca.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "livro")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class Livro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_liv;
+    @NonNull
+    private String titulo_liv;
+    @NonNull
+    private String isbn_liv;
+    @NonNull
+    private int ano_publicacao_liv;
+
+//    @NonNull
+//    private int id_autor_liv;
+    // mapeia relacionamento com autor
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_autor_liv")
+    private Autor autor_liv;
+
+    @NonNull
+    private boolean disponivel_liv;
+    @NonNull
+    private boolean ativo_liv;
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Usuario.java:
+package br.csi.biblioteca.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "usuario")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id_us;
+    @NonNull
+    private String email_us;
+    @NonNull
+    private String senha_us;
+    @NonNull
+    private String nome_us;
+    @NonNull
+    private boolean ativo_us;
+    @NonNull
+    private String tipo_us;
+
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\service\AutorService.java:
+package br.csi.biblioteca.service;
+
+import br.csi.biblioteca.model.Autor;
+import br.csi.biblioteca.model.AutorRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class AutorService {
+    private final AutorRepository repository;
+
+    public AutorService(AutorRepository repository) {
+        this.repository = repository;
+    }
+
+    public Autor salvar(Autor autor) {
+        return this.repository.save(autor);
+    }
+
+    public List<Autor> listar() {
+        return this.repository.findAll();
+    }
+
+    public Autor getAutor(int id) {
+        return this.repository.findById(id).orElse(null);
+    }
+
+    public void excluir(int id) {
+        try {
+            this.repository.deleteById(id);
+        } catch(DataIntegrityViolationException e) {
+            throw new RuntimeException("Erro: o autor não pode ser excluído pois possui livros cadastrados");
+        }
+    }
+
+    public void atualizar(Autor autor) {
+        Autor a = this.repository.getReferenceById(autor.getId_aut());
+        a.setNome_aut(autor.getNome_aut());
+        a.setNacionalidade_aut(autor.getNacionalidade_aut());
+        a.setData_nascimento_aut(autor.getData_nascimento_aut());
+        this.repository.save(a);
+    }
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\application.properties:
+spring.application.name=biblioteca3.0
+
+server.servlet.context-path=/biblioteca3.0
+spring.datasource.url=jdbc:postgresql://localhost:5432/biblioteca3.0
+spring.datasource.username=postgres
+spring.datasource.password=1234
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V1__create-table-usuario.sql:
+CREATE TABLE usuario (
+                         id_us SERIAL NOT NULL PRIMARY KEY,
+                         nome_us VARCHAR(255) NOT NULL,
+                         email_us VARCHAR(255) UNIQUE NOT NULL,
+                         senha_us VARCHAR(255) NOT NULL,
+                         tipo_us VARCHAR(50) NOT NULL CHECK (tipo_us IN ('ADMIN', 'USUARIO')),
+                         ativo_us BOOLEAN DEFAULT true
+)
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V2__create-tables-autor-livro-emprestimo.sql:
+-- Tabela de Autores
+CREATE TABLE autor (
+                       id_aut SERIAL PRIMARY KEY,
+                       nome_aut VARCHAR(255) NOT NULL,
+                       nacionalidade_aut VARCHAR(100),
+                       data_nascimento_aut DATE
+);
+
+-- Tabela de Livros
+CREATE TABLE livro (
+                       id_liv SERIAL PRIMARY KEY,
+                       titulo_liv VARCHAR(255) NOT NULL,
+                       isbn_liv VARCHAR(50),
+                       ano_publicacao_liv INT,
+                       id_autor_liv INT,
+                       disponivel_liv BOOLEAN DEFAULT true,
+                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE SET NULL
+);
+
+-- Tabela de Empréstimos
+CREATE TABLE emprestimo (
+                            id_emp SERIAL PRIMARY KEY,
+                            id_livro_emp INT NOT NULL,
+                            id_usuario_emp INT NOT NULL,
+                            data_emprestimo_emp DATE NOT NULL,
+                            data_devolucao_prevista_emp DATE,
+                            data_devolucao_efetiva_emp DATE,
+                            status_emp VARCHAR(50) CHECK (status_emp IN ('ATIVO', 'CONCLUIDO', 'ATRASADO')),
+                            CONSTRAINT fk_livro FOREIGN KEY (id_livro_emp) REFERENCES livro(id_liv),
+                            CONSTRAINT fk_usuario FOREIGN KEY (id_usuario_emp) REFERENCES usuario(id_us)
+);.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V3__insert-into-usuario.sql:
+INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
+VALUES ('Administrador', 'admin@biblioteca.com', 'admin123', 'ADMIN', true);
+
+INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
+VALUES ('Usuario', 'usuario@biblioteca.com', 'user123', 'USUARIO', true);.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V4__inserts-autor-livro.sql:
+INSERT INTO autor (nome_aut, nacionalidade_aut, data_nascimento_aut) VALUES
+                                                                         ('J.K. Rowling', 'Britânica', '1965-07-31'),
+                                                                         ('George R.R. Martin', 'Norte-americana', '1948-09-20'),
+                                                                         ('J.R.R. Tolkien', 'Britânica', '1892-01-03'),
+                                                                         ('Isaac Asimov', 'Russa', '1920-01-02'),
+                                                                         ('Clarice Lispector', 'Brasileira', '1920-12-10');
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+    ('Harry Potter e a Pedra Filosofal', '978-8532511010', 1997, 1);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('A Guerra dos Tronos', '978-8580411215', 1996, 2),
+                                                                               ('A Fúria dos Reis', '978-8580411222', 1998, 2);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('O Hobbit', '978-8595084742', 1937, 3),
+                                                                               ('O Senhor dos Anéis: A Sociedade do Anel', '978-8595084759', 1954, 3);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('Eu, Robô', '978-8576572008', 1950, 4);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('A Hora da Estrela', '978-8532505965', 1977, 5);
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\test\java\br\csi\biblioteca\BibliotecaApplicationTests.java:
+package br.csi.biblioteca;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class BibliotecaApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\application.properties:
+spring.application.name=biblioteca3.0
+
+server.servlet.context-path=/biblioteca3.0
+spring.datasource.url=jdbc:postgresql://localhost:5432/biblioteca3.0
+spring.datasource.username=postgres
+spring.datasource.password=1234
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V1__create-table-usuario.sql:
+CREATE TABLE usuario (
+                         id_us SERIAL NOT NULL PRIMARY KEY,
+                         nome_us VARCHAR(255) NOT NULL,
+                         email_us VARCHAR(255) UNIQUE NOT NULL,
+                         senha_us VARCHAR(255) NOT NULL,
+                         tipo_us VARCHAR(50) NOT NULL CHECK (tipo_us IN ('ADMIN', 'USUARIO')),
+                         ativo_us BOOLEAN DEFAULT true
+)
+.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V2__create-tables-autor-livro-emprestimo.sql:
+-- Tabela de Autores
+CREATE TABLE autor (
+                       id_aut SERIAL PRIMARY KEY,
+                       nome_aut VARCHAR(255) NOT NULL,
+                       nacionalidade_aut VARCHAR(100),
+                       data_nascimento_aut DATE
+);
+
+-- Tabela de Livros
+CREATE TABLE livro (
+                       id_liv SERIAL PRIMARY KEY,
+                       titulo_liv VARCHAR(255) NOT NULL,
+                       isbn_liv VARCHAR(50),
+                       ano_publicacao_liv INT,
+                       id_autor_liv INT,
+                       disponivel_liv BOOLEAN DEFAULT true,
+                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE SET NULL
+);
+
+-- Tabela de Empréstimos
+CREATE TABLE emprestimo (
+                            id_emp SERIAL PRIMARY KEY,
+                            id_livro_emp INT NOT NULL,
+                            id_usuario_emp INT NOT NULL,
+                            data_emprestimo_emp DATE NOT NULL,
+                            data_devolucao_prevista_emp DATE,
+                            data_devolucao_efetiva_emp DATE,
+                            status_emp VARCHAR(50) CHECK (status_emp IN ('ATIVO', 'CONCLUIDO', 'ATRASADO')),
+                            CONSTRAINT fk_livro FOREIGN KEY (id_livro_emp) REFERENCES livro(id_liv),
+                            CONSTRAINT fk_usuario FOREIGN KEY (id_usuario_emp) REFERENCES usuario(id_us)
+);.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V3__insert-into-usuario.sql:
+INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
+VALUES ('Administrador', 'admin@biblioteca.com', 'admin123', 'ADMIN', true);
+
+INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
+VALUES ('Usuario', 'usuario@biblioteca.com', 'user123', 'USUARIO', true);.
+.
+- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V4__inserts-autor-livro.sql:
+INSERT INTO autor (nome_aut, nacionalidade_aut, data_nascimento_aut) VALUES
+                                                                         ('J.K. Rowling', 'Britânica', '1965-07-31'),
+                                                                         ('George R.R. Martin', 'Norte-americana', '1948-09-20'),
+                                                                         ('J.R.R. Tolkien', 'Britânica', '1892-01-03'),
+                                                                         ('Isaac Asimov', 'Russa', '1920-01-02'),
+                                                                         ('Clarice Lispector', 'Brasileira', '1920-12-10');
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+    ('Harry Potter e a Pedra Filosofal', '978-8532511010', 1997, 1);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('A Guerra dos Tronos', '978-8580411215', 1996, 2),
+                                                                               ('A Fúria dos Reis', '978-8580411222', 1998, 2);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('O Hobbit', '978-8595084742', 1937, 3),
+                                                                               ('O Senhor dos Anéis: A Sociedade do Anel', '978-8595084759', 1954, 3);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('Eu, Robô', '978-8576572008', 1950, 4);
+
+INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUES
+                                                                               ('A Hora da Estrela', '978-8532505965', 1977, 5);
+.
+.
