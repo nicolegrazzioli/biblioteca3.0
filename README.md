@@ -5,9 +5,9 @@
 
 - [ ] img do modelo ER: (1)
 
-- [ ] Spring boot (1)
+- [x] Spring boot (1)
 
-- [ ] Flyway (1)
+- [x] Flyway (1)
 
 - [ ] Spring Data JPA com Mapeamentos NxN completos (2)
 
