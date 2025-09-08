@@ -1,4 +1,4 @@
-package br.csi.biblioteca.model;
+package br.csi.biblioteca.model.autor;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

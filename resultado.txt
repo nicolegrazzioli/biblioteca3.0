@@ -1,9 +1,9 @@
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\.mvn\wrapper\maven-wrapper.properties:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\.mvn\wrapper\maven-wrapper.properties:
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.11/apache-maven-3.9.11-bin.zip
 
 
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\BibliotecaApplication.java:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\BibliotecaApplication.java:
 package br.csi.biblioteca;
 
 import org.springframework.boot.SpringApplication;
@@ -19,14 +19,22 @@ public class BibliotecaApplication {
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\AutorController.java:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\AutorController.java:
 package br.csi.biblioteca.controller;
 
-import br.csi.biblioteca.model.Autor;
+import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.service.AutorService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+/** status
+ * POST = 201 CREATED
+ * DELETE = 204 NO CONTENT
+ * GET & PUT = 200 OK
+ */
 
 @RestController
 @RequestMapping("/autores")
@@ -36,41 +44,113 @@ public class AutorController {
         this.service = service;
     }
 
-    @GetMapping("/listar")
-    public List<Autor> listar() {
-        return this.service.listar();
+    @GetMapping
+    public ResponseEntity<List<Autor>> listar() {
+        List<Autor> autores = service.listar();
+        return ResponseEntity.ok(autores); //200
     }
 
     @GetMapping("/{id}")
-    public Autor autor(@PathVariable Integer id) {
-        return this.service.getAutor(id);
+    public ResponseEntity<Autor> buscarPorId(@PathVariable Integer id) {
+        Autor a = service.getAutor(id);
+        return ResponseEntity.ok(a);
     }
 
-    @PostMapping
-    public void salvar(@RequestBody Autor autor) {
-        this.service.salvar(autor);
+    @PostMapping("/registrar")
+    public ResponseEntity<Autor> salvar(@RequestBody Autor autor) {
+        Autor a = service.salvar(autor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(a);
     }
 
-    @PutMapping
-    public void atualizar(@RequestBody Autor autor) {
-        this.service.atualizar(autor);
+    @PutMapping("/{id}")
+    public ResponseEntity<Autor> atualizar(@RequestBody Autor autor) {
+        Autor a = service.atualizar(autor);
+        return ResponseEntity.ok(a);
     }
 
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Integer id) {
-        this.service.excluir(id);
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build(); //204
     }
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Autor.java:
-package br.csi.biblioteca.model;
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\UsuarioController.java:
+package br.csi.biblioteca.controller;
+
+import br.csi.biblioteca.model.usuario.Usuario;
+import br.csi.biblioteca.service.UsuarioService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/** status
+ * POST = 201 CREATED
+ * DELETE = 204 NO CONTENT
+ * GET & PUT = 200 OK
+ */
+
+@RestController //retorna dados no http
+@RequestMapping("/usuarios")
+public class UsuarioController {
+    private UsuarioService service;
+    public UsuarioController(UsuarioService service) {
+        this.service = service;
+    }
+
+    //criar ususario
+    @PostMapping("/registrar")
+//    public void salvar(@RequestBody Usuario usuario) { this.service.salvar(usuario); }
+                                            //pega o json e transforma em um objeto Usuario
+    public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){ //retorna resposta http completa, com objeto Usuario
+        Usuario u = service.salvar(usuario);
+            //cod 201 (criado)         objeto u na resposta (resultado)
+        return ResponseEntity.status(HttpStatus.CREATED).body(u);
+    }
+
+
+    //admin atualizae um usuario
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizar(@PathVariable Integer id, @RequestBody Usuario usuario){
+        usuario.setId_us(id);
+        Usuario u = service.atualizar(usuario);
+        return ResponseEntity.ok(u);
+    }
+
+
+    //admin excluir usuario
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Integer id){
+        service.excluir(id);
+        return ResponseEntity.noContent().build(); //status 204 - exclusão bem sucedida
+    }
+
+
+    //admin listar usuarios ativos
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listar() {
+        List<Usuario> usuarios = service.listarAtivos();
+        return ResponseEntity.ok(usuarios); //ResponseEntity.status(HttpStatus.OK) = 200
+    }
+
+
+    //admin buscar usuario por id
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id){
+        Usuario u = service.getUsuarioById(id);
+        return ResponseEntity.ok(u);
+    }
+}
+.
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\autor\Autor.java:
+package br.csi.biblioteca.model.autor;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "autor")
@@ -82,27 +162,23 @@ import java.time.format.DateTimeFormatter;
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_aut;
-    @NonNull
-    private String nome_aut;
-    @NonNull
-    private String nacionalidade_aut;
-    @NonNull
-    private String data_nascimento_aut;
+    @Column(name = "id_aut")
+    private int idAut;
 
-    public void setData_nascimento_aut(String data_nascimento_aut) {
-        try {
-            LocalDate date = LocalDate.parse(data_nascimento_aut);
-            this.data_nascimento_aut = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Formato de saída inválido. Use AAAA-MM-DD");
-        }
-    }
+    @Column(name = "nome_aut", nullable = false)
+    private String nomeAut;
+
+    @Column(name = "nacionalidade_aut", nullable = false)
+    private String nacionalidadeAut;
+
+    @Column(name = "data_nascimento_aut", nullable = false)
+    private java.time.LocalDate dataNascimentoAut;
+
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\AutorRepository.java:
-package br.csi.biblioteca.model;
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\autor\AutorRepository.java:
+package br.csi.biblioteca.model.autor;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -111,12 +187,14 @@ public interface AutorRepository extends JpaRepository<Autor, Integer> {
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Emprestimo.java:
-package br.csi.biblioteca.model;
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\emprestimo\Emprestimo.java:
+package br.csi.biblioteca.model.emprestimo;
 
+import br.csi.biblioteca.model.livro.Livro;
+import br.csi.biblioteca.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "emprestimo")
@@ -135,23 +213,26 @@ public class Emprestimo {
     //mapeia relacionamento com livro
     @ManyToOne
     @JoinColumn(name = "id_livro_emp")
-    private Livro livro_emp;
+    private Livro livroEmp;
 
 //    @NonNull
 //    private int id_usuario_emp;
     //mapeia relacionamento com usuario
     @ManyToOne
     @JoinColumn(name = "id_usuario_emp")
-    private Usuario usuario_emp;
+    private Usuario usuarioEmp;
 
-    @NonNull
-    private Date data_emprestimo_emp;
-    @NonNull
-    private Date data_devolucao_prevista_emp;
+    @Column(name = "data_emprestimo_emp", nullable = false)
+    private LocalDate dataEmprestimoEmp;
 
-    private Date data_devolucao_efetiva_emp;
-    @NonNull
-    private String status_emp;
+    @Column(name = "data_devolucao_prevista_emp", nullable = false)
+    private LocalDate dataDevolucaoPrevistaEmp;
+
+    @Column(name = "data_devolucao_efetiva_emp")
+    private LocalDate dataDevolucaoEfetivaEmp;
+
+    @Column(name = "status_emp", nullable = false)
+    private String statusEmp;
 
     //extras - para exibir - acessado pelos relacionamentos
 //    @NonNull
@@ -161,9 +242,26 @@ public class Emprestimo {
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Livro.java:
-package br.csi.biblioteca.model;
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\emprestimo\EmprestimoRepository.java:
+package br.csi.biblioteca.model.emprestimo;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface EmprestimoRepository extends JpaRepository<Emprestimo, Integer> {
+    /** findBy -- inicia uma consulta
+     *  UsuarioEmp -- atributo UsuarioEmp
+     *  _ -- proximo atributo
+     *  IdUs -- proximo atributo */
+
+    List<Emprestimo> findByUsuarioEmp_IdUs(Integer idUs);
+}
+.
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\livro\Livro.java:
+package br.csi.biblioteca.model.livro;
+
+import br.csi.biblioteca.model.autor.Autor;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -177,30 +275,48 @@ import lombok.*;
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_liv;
-    @NonNull
-    private String titulo_liv;
-    @NonNull
-    private String isbn_liv;
-    @NonNull
-    private int ano_publicacao_liv;
+    @Column(name = "id_liv")
+    private int idLiv;
+
+    @Column(name = "titulo_liv", nullable = false)
+    private String tituloLiv;
+
+    @Column(name = "isbn_liv", unique = true, nullable = false)
+    private String isbnLiv;
+
+    @Column(name = "ano_publicacao_liv", nullable = false)
+    private int anoPublicacaoLiv;
 
 //    @NonNull
 //    private int id_autor_liv;
     // mapeia relacionamento com autor
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_autor_liv")
-    private Autor autor_liv;
+    private Autor autorLiv;
 
-    @NonNull
-    private boolean disponivel_liv;
-    @NonNull
-    private boolean ativo_liv;
+    @Column(name = "disponivel_liv", nullable = false)
+    private boolean disponivelLiv;
+
+    @Column(name = "ativo_liv", nullable = false)
+    private boolean ativoLiv;
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\model\Usuario.java:
-package br.csi.biblioteca.model;
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\livro\LivroRepository.java:
+package br.csi.biblioteca.model.livro;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface LivroRepository extends JpaRepository<Livro, Integer> {
+    //buscar livros ativos
+    List<Livro> findByAtivoLivIsTrue();
+}
+.
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\Usuario.java:
+package br.csi.biblioteca.model.usuario;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -211,30 +327,51 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_us;
-    @NonNull
-    private String email_us;
-    @NonNull
-    private String senha_us;
-    @NonNull
-    private String nome_us;
-    @NonNull
-    private boolean ativo_us;
-    @NonNull
-    private String tipo_us;
+    @Column(name = "id_us")
+    private int idUs;
 
+    @Column(name = "email_us", unique = true, nullable = false)
+    private String emailUs;
+
+    @Column(name = "senha_us", nullable = false)
+    private String senhaUs;
+
+    @Column(name = "nome_us", nullable = false)
+    private String nomeUs;
+
+    @Column(name = "ativo_us")
+    private boolean ativoUs;
+
+    @Column(name = "tipo_us", nullable = false)
+    private String tipoUs;
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\java\br\csi\biblioteca\service\AutorService.java:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\UsuarioRepository.java:
+package br.csi.biblioteca.model.usuario;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+    //Ativo_us --> JPA ignora _ e procura por emailUs
+    List<Usuario> findByAtivoUsIsTrue();
+
+    //Optional -- pesquisa que pode retornar null
+    Optional<Usuario> findByEmailUs(String email);
+}
+.
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\service\AutorService.java:
 package br.csi.biblioteca.service;
 
-import br.csi.biblioteca.model.Autor;
-import br.csi.biblioteca.model.AutorRepository;
+import br.csi.biblioteca.model.autor.Autor;
+import br.csi.biblioteca.model.autor.AutorRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -257,7 +394,7 @@ public class AutorService {
     }
 
     public Autor getAutor(int id) {
-        return this.repository.findById(id).orElse(null);
+        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Autor não encontrado"));
     }
 
     public void excluir(int id) {
@@ -268,17 +405,267 @@ public class AutorService {
         }
     }
 
-    public void atualizar(Autor autor) {
-        Autor a = this.repository.getReferenceById(autor.getId_aut());
-        a.setNome_aut(autor.getNome_aut());
-        a.setNacionalidade_aut(autor.getNacionalidade_aut());
-        a.setData_nascimento_aut(autor.getData_nascimento_aut());
-        this.repository.save(a);
+    //retorna autor atualizado
+    public Autor atualizar(Autor autor) {
+        Autor a = this.repository.getReferenceById(autor.getIdAut());
+        a.setNomeAut(autor.getNomeAut());
+        a.setNacionalidadeAut(autor.getNacionalidadeAut());
+        a.setDataNascimentoAut(autor.getDataNascimentoAut());
+        return this.repository.save(a);
     }
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\application.properties:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\service\EmprestimoService.java:
+package br.csi.biblioteca.service;
+
+import br.csi.biblioteca.model.emprestimo.Emprestimo;
+import br.csi.biblioteca.model.emprestimo.EmprestimoRepository;
+import br.csi.biblioteca.model.livro.Livro;
+import br.csi.biblioteca.model.livro.LivroRepository;
+import br.csi.biblioteca.model.usuario.Usuario;
+import br.csi.biblioteca.model.usuario.UsuarioRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * contem as regras de negocio, implementa e faz o registro do emprestimo em si
+ * verificar se o livro está disponivel
+ * define data atual como inicio do emprestimo
+ * calcula data final (+14d)
+ * define livro como indisponivel
+ * define status como ativo - novo objeto Emprestimo
+ */
+
+@Service
+public class EmprestimoService {
+    private final EmprestimoRepository emprestimoRepository;
+    private final LivroRepository livroRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    public EmprestimoService(EmprestimoRepository emprestimoRepository, LivroRepository livroRepository, UsuarioRepository usuarioRepository) {
+        this.emprestimoRepository = emprestimoRepository;
+        this.livroRepository = livroRepository;
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    //consulta
+    public List<Emprestimo> listarTodos() {
+        return this.emprestimoRepository.findAll();
+    }
+
+    public List<Emprestimo> listarPorUsuario(Integer idUsuario) {
+        return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuario);
+    }
+
+    public Emprestimo buscarPorId(Integer id) {
+        return this.emprestimoRepository.findById(id).orElse(null);
+    }
+
+    //criar e devolver
+    @Transactional //todas operações no banco são feitas em 1 transação
+    public Emprestimo criarEmprestimo(Integer idLivro, Integer idUsuario) {
+        Livro livro = this.livroRepository.findById(idLivro).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        Usuario usuario = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        //regra de negocio
+        if (!livro.isAtivoLiv() || !livro.isDisponivelLiv()) {
+            throw new RuntimeException("O livro não está disponível");
+        }
+
+        livro.setDisponivelLiv(false);
+        this.livroRepository.save(livro); //salva alteração
+
+        //novo emprestimo
+        Emprestimo e = new  Emprestimo();
+        e.setLivroEmp(livro);
+        e.setUsuarioEmp(usuario);
+        e.setDataEmprestimoEmp(LocalDate.now());
+        e.setDataDevolucaoPrevistaEmp(LocalDate.now().plusDays(14));
+        e.setStatusEmp("ATIVO");
+
+        return this.emprestimoRepository.save(e);
+    }
+
+    @Transactional
+    public Emprestimo devolver(Integer id) {
+        Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+        if (!e.getStatusEmp().equals("ATIVO")) {
+            throw new RuntimeException("O empréstimo não pode ser devolvido pois não está ativo");
+        }
+
+        //atualiza estado do livro
+        Livro l =  e.getLivroEmp();
+        l.setDisponivelLiv(true);
+        this.livroRepository.save(l); //salva estado
+
+        //atualiza estado do emprestimo
+        e.setStatusEmp("CONCLUIDO");
+        e.setDataDevolucaoEfetivaEmp(LocalDate.now());
+
+        return this.emprestimoRepository.save(e);
+    }
+}
+.
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\service\LivroService.java:
+package br.csi.biblioteca.service;
+
+import br.csi.biblioteca.model.autor.Autor;
+import br.csi.biblioteca.model.autor.AutorRepository;
+import br.csi.biblioteca.model.livro.Livro;
+import br.csi.biblioteca.model.livro.LivroRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class LivroService {
+    private final LivroRepository livroRepository;
+    private final AutorRepository autorRepository;
+
+    public LivroService(LivroRepository livroRepository, AutorRepository autorRepository) {
+        this.livroRepository = livroRepository;
+        this.autorRepository = autorRepository;
+    }
+
+    //consulta
+    public List<Livro> listarAll(){
+        //retorna todos os livros
+        return livroRepository.findAll();
+    }
+
+    public List<Livro> listarAtivos(){
+        //retorna livros ativos
+        return livroRepository.findByAtivoLivIsTrue(); //chama metodo do repository
+    }
+
+    public Livro getLivroById(int id){
+        return livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+    }
+
+
+    //edição
+    @Transactional
+    public Livro salvar(Livro livro){
+        //busca autor para ver se existe
+        Autor autor = autorRepository.findById(livro.getAutorLiv().getIdAut()).orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+
+        //associa autor ao livro
+        livro.setAutorLiv(autor);
+        livro.setDisponivelLiv(true);
+        livro.setAtivoLiv(true);
+
+        //id nulo/zero --> JPA faz insert
+        return livroRepository.save(livro);
+    }
+
+    @Transactional
+    public Livro atualizar(Livro livro){
+        Livro livroBanco = this.livroRepository.findById(livro.getIdLiv()).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        Autor autor = autorRepository.findById(livro.getAutorLiv().getIdAut()).orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+
+        //atualiza livro
+        livroBanco.setTituloLiv(livro.getTituloLiv());
+        livroBanco.setIsbnLiv(livro.getIsbnLiv());
+        livroBanco.setAnoPublicacaoLiv(livro.getAnoPublicacaoLiv());
+        livroBanco.setAutorLiv(autor);
+
+        //id existente --> JPA faz update
+        return this.livroRepository.save(livroBanco);
+    }
+
+    @Transactional
+    public void excluir(int id){
+        Livro l = this.livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        //regra de negocio
+        if (!l.isDisponivelLiv()) {
+            throw new RuntimeException("O livro não pode ser excluído pois tem empréstimo ativo");
+        }
+
+        //atualiza livro: soft delete
+        l.setAtivoLiv(false);
+        this.livroRepository.save(l); //update
+    }
+
+}
+.
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\java\br\csi\biblioteca\service\UsuarioService.java:
+package br.csi.biblioteca.service;
+
+import br.csi.biblioteca.model.usuario.Usuario;
+import br.csi.biblioteca.model.usuario.UsuarioRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UsuarioService {
+    private final UsuarioRepository repository;
+    public UsuarioService(UsuarioRepository repository) {
+        this.repository = repository;
+    }
+
+    public Usuario autenticar(String email, String senha){
+        Usuario u = this.repository.findByEmailUs(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (u.getSenhaUs().equals(senha)){
+            return u;
+        } else {
+            throw new RuntimeException("Senha incorreta");
+        }
+    }
+
+    //crud
+    public Usuario salvar(Usuario usuario){
+        //regra de negocio: sempre do tipo 'usuário'
+        usuario.setTipoUs("USUARIO");
+        usuario.setAtivoUs(true);
+        return repository.save(usuario);
+    }
+
+    public Usuario atualizar(Usuario usuario) {
+        //busca usuario no banco
+        Usuario usuarioBanco = this.repository.findById(usuario.getIdUs()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        //atualiza
+        usuarioBanco.setNomeUs(usuario.getNomeUs());
+        usuarioBanco.setEmailUs(usuario.getEmailUs());
+        // usuarioBanco.setSenhaUs(usuario.getSenhaUs());
+
+        return this.repository.save(usuarioBanco);
+    }
+
+    public void excluir(Integer id){
+        try {
+            this.repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            //se tiver emprestimos ativos
+            throw new RuntimeException("O usuário não pode ser excluído pois tem empréstimos ativos");
+        }
+    }
+
+    //consulta
+    public List<Usuario> listarAtivos(){
+        return repository.findByAtivoUsIsTrue();
+    }
+
+    public Usuario getUsuarioById(Integer id){
+        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não enocntrado"));
+    }
+}
+.
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\resources\application.properties:
 spring.application.name=biblioteca3.0
 
 server.servlet.context-path=/biblioteca3.0
@@ -291,7 +678,7 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V1__create-table-usuario.sql:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\resources\db\migration\V1__create-table-usuario.sql:
 CREATE TABLE usuario (
                          id_us SERIAL NOT NULL PRIMARY KEY,
                          nome_us VARCHAR(255) NOT NULL,
@@ -302,7 +689,7 @@ CREATE TABLE usuario (
 )
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V2__create-tables-autor-livro-emprestimo.sql:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\resources\db\migration\V2__create-tables-autor-livro-emprestimo.sql:
 -- Tabela de Autores
 CREATE TABLE autor (
                        id_aut SERIAL PRIMARY KEY,
@@ -319,7 +706,8 @@ CREATE TABLE livro (
                        ano_publicacao_liv INT,
                        id_autor_liv INT,
                        disponivel_liv BOOLEAN DEFAULT true,
-                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE SET NULL
+                       ativo_liv BOOLEAN DEFAULT true, -- Adicionada a coluna para soft delete
+                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE RESTRICT -- Corrigida a restrição
 );
 
 -- Tabela de Empréstimos
@@ -333,16 +721,17 @@ CREATE TABLE emprestimo (
                             status_emp VARCHAR(50) CHECK (status_emp IN ('ATIVO', 'CONCLUIDO', 'ATRASADO')),
                             CONSTRAINT fk_livro FOREIGN KEY (id_livro_emp) REFERENCES livro(id_liv),
                             CONSTRAINT fk_usuario FOREIGN KEY (id_usuario_emp) REFERENCES usuario(id_us)
-);.
+);
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V3__insert-into-usuario.sql:
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\resources\db\migration\V3__insert-into-usuario.sql:
 INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
 VALUES ('Administrador', 'admin@biblioteca.com', 'admin123', 'ADMIN', true);
 
 INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
 VALUES ('Usuario', 'usuario@biblioteca.com', 'user123', 'USUARIO', true);.
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\main\resources\db\migration\V4__inserts-autor-livro.sql:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\main\resources\db\migration\V4__inserts-autor-livro.sql:
 INSERT INTO autor (nome_aut, nacionalidade_aut, data_nascimento_aut) VALUES
                                                                          ('J.K. Rowling', 'Britânica', '1965-07-31'),
                                                                          ('George R.R. Martin', 'Norte-americana', '1948-09-20'),
@@ -368,7 +757,7 @@ INSERT INTO livro (titulo_liv, isbn_liv, ano_publicacao_liv, id_autor_liv) VALUE
                                                                                ('A Hora da Estrela', '978-8532505965', 1977, 5);
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\src\test\java\br\csi\biblioteca\BibliotecaApplicationTests.java:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\src\test\java\br\csi\biblioteca\BibliotecaApplicationTests.java:
 package br.csi.biblioteca;
 
 import org.junit.jupiter.api.Test;
@@ -384,7 +773,7 @@ class BibliotecaApplicationTests {
 }
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\application.properties:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\target\classes\application.properties:
 spring.application.name=biblioteca3.0
 
 server.servlet.context-path=/biblioteca3.0
@@ -397,7 +786,7 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V1__create-table-usuario.sql:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\target\classes\db\migration\V1__create-table-usuario.sql:
 CREATE TABLE usuario (
                          id_us SERIAL NOT NULL PRIMARY KEY,
                          nome_us VARCHAR(255) NOT NULL,
@@ -408,7 +797,7 @@ CREATE TABLE usuario (
 )
 .
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V2__create-tables-autor-livro-emprestimo.sql:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\target\classes\db\migration\V2__create-tables-autor-livro-emprestimo.sql:
 -- Tabela de Autores
 CREATE TABLE autor (
                        id_aut SERIAL PRIMARY KEY,
@@ -425,7 +814,8 @@ CREATE TABLE livro (
                        ano_publicacao_liv INT,
                        id_autor_liv INT,
                        disponivel_liv BOOLEAN DEFAULT true,
-                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE SET NULL
+                       ativo_liv BOOLEAN DEFAULT true, -- Adicionada a coluna para soft delete
+                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE RESTRICT -- Corrigida a restrição
 );
 
 -- Tabela de Empréstimos
@@ -439,16 +829,17 @@ CREATE TABLE emprestimo (
                             status_emp VARCHAR(50) CHECK (status_emp IN ('ATIVO', 'CONCLUIDO', 'ATRASADO')),
                             CONSTRAINT fk_livro FOREIGN KEY (id_livro_emp) REFERENCES livro(id_liv),
                             CONSTRAINT fk_usuario FOREIGN KEY (id_usuario_emp) REFERENCES usuario(id_us)
-);.
+);
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V3__insert-into-usuario.sql:
+.
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\target\classes\db\migration\V3__insert-into-usuario.sql:
 INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
 VALUES ('Administrador', 'admin@biblioteca.com', 'admin123', 'ADMIN', true);
 
 INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, ativo_us)
 VALUES ('Usuario', 'usuario@biblioteca.com', 'user123', 'USUARIO', true);.
 .
-- Endereço: C:\Users\aluno\Desktop\nicole\poow2\biblioteca3.0\target\classes\db\migration\V4__inserts-autor-livro.sql:
+- Endereço: C:\Users\Cliente\nicolegg13\biblioteca3.0\target\classes\db\migration\V4__inserts-autor-livro.sql:
 INSERT INTO autor (nome_aut, nacionalidade_aut, data_nascimento_aut) VALUES
                                                                          ('J.K. Rowling', 'Britânica', '1965-07-31'),
                                                                          ('George R.R. Martin', 'Norte-americana', '1948-09-20'),

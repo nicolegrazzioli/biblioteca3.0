@@ -1,10 +1,18 @@
 package br.csi.biblioteca.controller;
 
-import br.csi.biblioteca.model.Autor;
+import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.service.AutorService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+/** status
+ * POST = 201 CREATED
+ * DELETE = 204 NO CONTENT
+ * GET & PUT = 200 OK
+ */
 
 @RestController
 @RequestMapping("/autores")
@@ -14,28 +22,33 @@ public class AutorController {
         this.service = service;
     }
 
-    @GetMapping("/listar")
-    public List<Autor> listar() {
-        return this.service.listar();
+    @GetMapping
+    public ResponseEntity<List<Autor>> listar() {
+        List<Autor> autores = service.listar();
+        return ResponseEntity.ok(autores); //200
     }
 
     @GetMapping("/{id}")
-    public Autor autor(@PathVariable Integer id) {
-        return this.service.getAutor(id);
+    public ResponseEntity<Autor> buscarPorId(@PathVariable Integer id) {
+        Autor a = service.getAutor(id);
+        return ResponseEntity.ok(a);
     }
 
-    @PostMapping
-    public void salvar(@RequestBody Autor autor) {
-        this.service.salvar(autor);
+    @PostMapping("/registrar")
+    public ResponseEntity<Autor> salvar(@RequestBody Autor autor) {
+        Autor a = service.salvar(autor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(a);
     }
 
-    @PutMapping
-    public void atualizar(@RequestBody Autor autor) {
-        this.service.atualizar(autor);
+    @PutMapping("/{id}")
+    public ResponseEntity<Autor> atualizar(@RequestBody Autor autor) {
+        Autor a = service.atualizar(autor);
+        return ResponseEntity.ok(a);
     }
 
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Integer id) {
-        this.service.excluir(id);
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build(); //204
     }
 }

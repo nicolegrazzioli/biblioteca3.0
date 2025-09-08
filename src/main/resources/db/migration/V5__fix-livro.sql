@@ -1,4 +1,0 @@
-ALTER TABLE livro ADD COLUMN ativo_liv BOOLEAN DEFAULT true;
-
-ALTER TABLE livro DROP CONSTRAINT fk_autor;
-ALTER TABLE livro ADD CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE RESTRICT;

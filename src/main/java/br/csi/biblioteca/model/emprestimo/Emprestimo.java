@@ -1,8 +1,10 @@
-package br.csi.biblioteca.model;
+package br.csi.biblioteca.model.emprestimo;
 
+import br.csi.biblioteca.model.livro.Livro;
+import br.csi.biblioteca.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "emprestimo")
@@ -10,7 +12,7 @@ import java.sql.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,23 +23,26 @@ public class Emprestimo {
     //mapeia relacionamento com livro
     @ManyToOne
     @JoinColumn(name = "id_livro_emp")
-    private Livro livro_emp;
+    private Livro livroEmp;
 
 //    @NonNull
 //    private int id_usuario_emp;
     //mapeia relacionamento com usuario
     @ManyToOne
     @JoinColumn(name = "id_usuario_emp")
-    private Usuario usuario_emp;
+    private Usuario usuarioEmp;
 
-    @NonNull
-    private Date data_emprestimo_emp;
-    @NonNull
-    private Date data_devolucao_prevista_emp;
+    @Column(name = "data_emprestimo_emp", nullable = false)
+    private LocalDate dataEmprestimoEmp;
 
-    private Date data_devolucao_efetiva_emp;
-    @NonNull
-    private String status_emp;
+    @Column(name = "data_devolucao_prevista_emp", nullable = false)
+    private LocalDate dataDevolucaoPrevistaEmp;
+
+    @Column(name = "data_devolucao_efetiva_emp")
+    private LocalDate dataDevolucaoEfetivaEmp;
+
+    @Column(name = "status_emp", nullable = false)
+    private String statusEmp;
 
     //extras - para exibir - acessado pelos relacionamentos
 //    @NonNull

@@ -1,7 +1,7 @@
 package br.csi.biblioteca.service;
 
-import br.csi.biblioteca.model.Autor;
-import br.csi.biblioteca.model.AutorRepository;
+import br.csi.biblioteca.model.autor.Autor;
+import br.csi.biblioteca.model.autor.AutorRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class AutorService {
     }
 
     public Autor getAutor(int id) {
-        return this.repository.findById(id).orElse(null);
+        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Autor não encontrado"));
     }
 
     public void excluir(int id) {
@@ -35,11 +35,12 @@ public class AutorService {
         }
     }
 
-    public void atualizar(Autor autor) {
-        Autor a = this.repository.getReferenceById(autor.getId_aut());
-        a.setNome_aut(autor.getNome_aut());
-        a.setNacionalidade_aut(autor.getNacionalidade_aut());
-        a.setData_nascimento_aut(autor.getData_nascimento_aut());
-        this.repository.save(a);
+    //retorna autor atualizado
+    public Autor atualizar(Autor autor) {
+        Autor a = this.repository.getReferenceById(autor.getIdAut());
+        a.setNomeAut(autor.getNomeAut());
+        a.setNacionalidadeAut(autor.getNacionalidadeAut());
+        a.setDataNascimentoAut(autor.getDataNascimentoAut());
+        return this.repository.save(a);
     }
 }

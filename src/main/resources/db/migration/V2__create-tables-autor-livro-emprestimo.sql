@@ -14,7 +14,8 @@ CREATE TABLE livro (
                        ano_publicacao_liv INT,
                        id_autor_liv INT,
                        disponivel_liv BOOLEAN DEFAULT true,
-                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE SET NULL
+                       ativo_liv BOOLEAN DEFAULT true, -- Adicionada a coluna para soft delete
+                       CONSTRAINT fk_autor FOREIGN KEY (id_autor_liv) REFERENCES autor(id_aut) ON DELETE RESTRICT -- Corrigida a restrição
 );
 
 -- Tabela de Empréstimos
