@@ -32,7 +32,7 @@ collection:
     meta:
       id: req_01bfefe277434ce8bbe240112e965a84
       created: 1758216539065
-      modified: 1758220991764
+      modified: 1758227968787
       isPrivate: false
       description: ""
       sortKey: -1758220471928
@@ -106,7 +106,7 @@ collection:
     meta:
       id: req_f45174dd20d84863b0035fdc4e3c2cf8
       created: 1758219376635
-      modified: 1758220135590
+      modified: 1758226083072
       isPrivate: false
       description: ""
       sortKey: -1758219376635
@@ -295,7 +295,7 @@ collection:
     meta:
       id: req_3463271bc7854c0d9d79037288b3b477
       created: 1758220847881
-      modified: 1758220913326
+      modified: 1758225505741
       isPrivate: false
       description: ""
       sortKey: -1758220847881
@@ -304,9 +304,9 @@ collection:
       mimeType: application/json
       text: |-
         {
-        		"emailUs": "outrousuario@biblioteca.com",
-        		"senhaUs": "user1234",
-        		"nomeUs": "Outro Usuario",
+        		"emailUs": "usuario12345@biblioteca.com",
+        		"senhaUs": "user12345",
+        		"nomeUs": "Mais Outro Usuario",
         		"ativoUs": true,
         		"tipoUs": "USUARIO"
         	}
@@ -376,6 +376,324 @@ collection:
       sortKey: -1758220337075.5
     method: DELETE
     headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/emprestimos?idUsuario=1
+    name: GET emprestimos (admin) - todos
+    meta:
+      id: req_1f1dba2369434492901332975ceba18e
+      created: 1758224400504
+      modified: 1758225435106
+      isPrivate: false
+      description: ""
+      sortKey: -1758224400504
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/emprestimos?idUsuario=2
+    name: GET emprestimos (usuario) - seus
+    meta:
+      id: req_59654cf29f144e9ea62195e8094c0a13
+      created: 1758225417614
+      modified: 1758225551791
+      isPrivate: false
+      description: ""
+      sortKey: -1758225417614
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/emprestimos/registrar
+    name: POST emprestimo - livro 1 e usuario 2
+    meta:
+      id: req_9733c80d2bad4c62839491ac503913f5
+      created: 1758226084482
+      modified: 1758228238851
+      isPrivate: false
+      description: ""
+      sortKey: -1758226084482
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"livroEmp": 1,
+        	"usuarioEmp": 2
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/emprestimos/registrar
+    name: "[ERRO 500] POST emprestimo - livro emprestado"
+    meta:
+      id: req_22f96e13655d44ce971dd7b6227ab54d
+      created: 1758227989832
+      modified: 1758229502200
+      isPrivate: false
+      description: ""
+      sortKey: -1758228211959.5
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"livroEmp": 1,
+        	"usuarioEmp": 5
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/emprestimos/registrar
+    name: POST emprestimo - livro 3 e usuario 5
+    meta:
+      id: req_71f20e6e2b0d4edd9800c2d52800858b
+      created: 1758228060084
+      modified: 1758228244804
+      isPrivate: false
+      description: ""
+      sortKey: -1758228060084
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"livroEmp": 3,
+        	"usuarioEmp": 5
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/emprestimos/registrar
+    name: "[ERRO 500] POST emprestimo - livro inativo"
+    meta:
+      id: req_9b16e2fc7cc5428699392e9941b44e2f
+      created: 1758228363835
+      modified: 1758230129891
+      isPrivate: false
+      description: ""
+      sortKey: -1758228363835
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"livroEmp": 2,
+        	"usuarioEmp": 5
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/usuarios/100
+    name: "[ERRO 500] GET usuario id=100 - não encontrado"
+    meta:
+      id: req_59eec46662f54bb19e48e91b21ae495f
+      created: 1758229441472
+      modified: 1758229797624
+      isPrivate: false
+      description: ""
+      sortKey: -1758222662294.5
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/usuarios/2
+    name: "[ERRO 500] DELETE usuario - tem empréstimo ativo"
+    meta:
+      id: req_b84a664ed0eb4ed099b04383633859c9
+      created: 1758229550108
+      modified: 1758229904097
+      isPrivate: false
+      description: ""
+      sortKey: -1758221793189.75
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/autores/100
+    name: "[ERRO 500] GET autor id=100 - não encontrado"
+    meta:
+      id: req_be404f7611194a1bb7c67adeb6479709
+      created: 1758229625792
+      modified: 1758229664875
+      isPrivate: false
+      description: ""
+      sortKey: -1758219182021.625
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/autores/1
+    name: "[ERRO 500] DELETE autor - tem livros cadastrados"
+    meta:
+      id: req_1d9f47c4d15c42649f8f1713d2cb3bcd
+      created: 1758229704459
+      modified: 1758229758604
+      isPrivate: false
+      description: ""
+      sortKey: -1758219279328.3125
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/livros/100
+    name: "[ERRO 500] GET livro id=100 - não encontrado"
+    meta:
+      id: req_34c6f203b7774f669afa5cf5e090357e
+      created: 1758229780374
+      modified: 1758229807139
+      isPrivate: false
+      description: ""
+      sortKey: -1758220404501.75
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/livros/1
+    name: "[ERRO 500] DELETE livro - tem empréstimo ativo"
+    meta:
+      id: req_bb9a8264465c420c983191e1c760cecc
+      created: 1758229875075
+      modified: 1758229917617
+      isPrivate: false
+      description: ""
+      sortKey: -1758220438214.875
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.1
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/biblioteca3.0/emprestimos/registrar
+    name: "[ERRO 500] POST emprestimo - livro não encontrado"
+    meta:
+      id: req_e6582e1c907340828e4fb17d7f2c4982
+      created: 1758229957074
+      modified: 1758230139678
+      isPrivate: false
+      description: ""
+      sortKey: -1758229957074
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"livroEmp": 100,
+        	"usuarioEmp": 100
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
       - name: User-Agent
         value: insomnia/11.6.1
     settings:

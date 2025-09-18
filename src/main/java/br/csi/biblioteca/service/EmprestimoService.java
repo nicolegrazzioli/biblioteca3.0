@@ -1,5 +1,6 @@
 package br.csi.biblioteca.service;
 
+import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.model.emprestimo.Emprestimo;
 import br.csi.biblioteca.model.emprestimo.EmprestimoRepository;
 import br.csi.biblioteca.model.livro.Livro;
@@ -36,16 +37,23 @@ public class EmprestimoService {
     }
 
     //consulta
-    public List<Emprestimo> listarTodos() {
-        return this.emprestimoRepository.findAll();
+    public List<Emprestimo> listar(Integer idUsuarioLogado) {
+        Usuario uLogado = usuarioRepository.findById(idUsuarioLogado).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if (uLogado.getTipoUs().equals("ADMIN")) {
+            //se for ADMIN, ve todos emprestimos de todos os usuarios
+            return this.emprestimoRepository.findAll();
+        } else {
+            //se for USUARIO, ve so os seus emprestimos
+            return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuarioLogado);
+        }
     }
 
-    public List<Emprestimo> listarPorUsuario(Integer idUsuario) {
-        return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuario);
-    }
+//    public List<Emprestimo> listarPorUsuario(Integer idUsuario) {
+//        return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuario);
+//    }
 
     public Emprestimo buscarPorId(Integer id) {
-        return this.emprestimoRepository.findById(id).orElse(null);
+        return this.emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
     }
 
     //criar e devolver
@@ -55,8 +63,11 @@ public class EmprestimoService {
         Usuario usuario = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         //regra de negocio
-        if (!livro.isAtivoLiv() || !livro.isDisponivelLiv()) {
-            throw new RuntimeException("O livro não está disponível");
+        if (!livro.isAtivoLiv()) {
+            throw new RuntimeException("O livro não está disponível: está inativo");
+        }
+        if (!livro.isDisponivelLiv()) {
+            throw new RuntimeException("O livro não está disponível: está emprestado");
         }
 
         livro.setDisponivelLiv(false);
