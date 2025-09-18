@@ -2,6 +2,7 @@ package br.csi.biblioteca.model.emprestimo;
 
 import br.csi.biblioteca.model.livro.Livro;
 import br.csi.biblioteca.model.usuario.Usuario;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@RequiredArgsConstructor
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

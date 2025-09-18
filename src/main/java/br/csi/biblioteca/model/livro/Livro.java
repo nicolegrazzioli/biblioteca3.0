@@ -1,6 +1,7 @@
 package br.csi.biblioteca.model.livro;
 
 import br.csi.biblioteca.model.autor.Autor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@RequiredArgsConstructor
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

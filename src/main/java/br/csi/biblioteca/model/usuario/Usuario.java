@@ -1,5 +1,6 @@
 package br.csi.biblioteca.model.usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
