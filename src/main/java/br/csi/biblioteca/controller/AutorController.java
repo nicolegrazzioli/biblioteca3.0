@@ -24,26 +24,27 @@ public class AutorController {
 
     @GetMapping
     public ResponseEntity<List<Autor>> listar() {
-        List<Autor> autores = service.listar();
-        return ResponseEntity.ok(autores); //200
+//        List<Autor> autores = service.listar();
+        return ResponseEntity.ok(service.listar()); //200
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Autor> buscarPorId(@PathVariable Integer id) {
-        Autor a = service.getAutor(id);
-        return ResponseEntity.ok(a);
+//        Autor a = service.getAutor(id);
+        return ResponseEntity.ok(service.getAutor(id));
     }
 
     @PostMapping("/registrar")
     public ResponseEntity<Autor> salvar(@RequestBody Autor autor) {
-        Autor a = service.salvar(autor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(a);
+//        Autor a = service.salvar(autor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(autor));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Autor> atualizar(@RequestBody Autor autor) {
-        Autor a = service.atualizar(autor);
-        return ResponseEntity.ok(a);
+    public ResponseEntity<Autor> atualizar(@PathVariable Integer id, @RequestBody Autor autor) {
+//        Autor a = service.atualizar(autor);
+        autor.setIdAut(id);
+        return ResponseEntity.ok(service.atualizar(autor));
     }
 
     @DeleteMapping("/{id}")

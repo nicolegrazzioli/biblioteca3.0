@@ -13,23 +13,20 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties("hibernateLazyInitializer")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_emp;
+    @Column(name = "id_emp")
+    private int idEmp;
 
-//    @NonNull
-//    private int id_livro_emp;
-    //mapeia relacionamento com livro
-    @ManyToOne
+    // emprestimo - livro
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_livro_emp")
     private Livro livroEmp;
 
-//    @NonNull
-//    private int id_usuario_emp;
-    //mapeia relacionamento com usuario
-    @ManyToOne
+    // emprestimo - usuario
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_emp")
     private Usuario usuarioEmp;
 
@@ -45,9 +42,4 @@ public class Emprestimo {
     @Column(name = "status_emp", nullable = false)
     private String statusEmp;
 
-    //extras - para exibir - acessado pelos relacionamentos
-//    @NonNull
-//    private String titulo_livro;
-//    @NonNull
-//    private String nome_usuario;
 }

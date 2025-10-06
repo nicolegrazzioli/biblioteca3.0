@@ -27,34 +27,34 @@ public class LivroController {
     //listar livros ativos - default
     @GetMapping
     public ResponseEntity<List<Livro>> listarAtivos() {
-        List<Livro> livrosAtivos = livroService.listarAtivos();
-        return ResponseEntity.ok(livrosAtivos); //200
+//        List<Livro> livrosAtivos = livroService.listarAtivos();
+        return ResponseEntity.ok(livroService.listarAtivos()); //200
     }
 
-    //listar todos os livros, inlcuindo dativados
+    //listar todos os livros, inlcuindo desativados
     @GetMapping("/all")
     public ResponseEntity<List<Livro>> listarAll() {
-        List<Livro> livrosAll = livroService.listarAll();
-        return ResponseEntity.ok(livrosAll); //200
+//        List<Livro> livrosAll = livroService.listarAll();
+        return ResponseEntity.ok(livroService.listarAll()); //200
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Livro> getLivroById(@PathVariable Integer id) {
-        Livro livro = livroService.getLivroById(id);
-        return ResponseEntity.ok(livro); //200
+//        Livro livro = livroService.getLivroById(id);
+        return ResponseEntity.ok(livroService.getLivroById(id)); //200
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<Livro> salvar(@RequestBody Livro livro) {
-        Livro novo =  livroService.salvar(livro);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
+    public ResponseEntity<Livro> salvar(@RequestBody LivroDTO livroDTO) {
+//        Livro novo =  livroService.salvar(livro);
+        return ResponseEntity.status(HttpStatus.CREATED).body(livroService.salvar(livroDTO)); //201
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Livro> atualizar(@PathVariable Integer id, @RequestBody Livro livro){
-        livro.setIdLiv(id);
-        Livro l =  livroService.atualizar(livro);
-        return ResponseEntity.ok(l); //200
+    public ResponseEntity<Livro> atualizar(@PathVariable Integer id, @RequestBody LivroDTO livroDTO){
+        livroDTO.setIdLiv(id);
+//        Livro l =  livroService.atualizar(livro);
+        return ResponseEntity.ok(livroService.atualizar(livroDTO)); //200
     }
 
     @DeleteMapping("/{id}")

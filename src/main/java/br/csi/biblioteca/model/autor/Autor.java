@@ -1,8 +1,11 @@
 package br.csi.biblioteca.model.autor;
 
+import br.csi.biblioteca.model.livro.Livro;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "autor")
@@ -10,7 +13,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties("hibernateLazyInitializer")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +28,9 @@ public class Autor {
 
     @Column(name = "data_nascimento_aut", nullable = false)
     private java.time.LocalDate dataNascimentoAut;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "autores")
+    private Set<Livro> livros;
 
 }

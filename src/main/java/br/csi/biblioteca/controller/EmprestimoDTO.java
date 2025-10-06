@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmprestimoDTO {
-    private Integer livroEmp;
-    private Integer usuarioEmp;
+    private Integer livroEmp; //idLivro
+    private Integer usuarioEmp; //idUsuario
 }

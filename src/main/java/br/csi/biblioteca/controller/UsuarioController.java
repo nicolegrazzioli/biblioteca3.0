@@ -27,9 +27,9 @@ public class UsuarioController {
 //    public void salvar(@RequestBody Usuario usuario) { this.service.salvar(usuario); }
                                             //pega o json e transforma em um objeto Usuario
     public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){ //retorna resposta http completa, com objeto Usuario
-        Usuario u = service.salvar(usuario);
+//        Usuario u = service.salvar(usuario);
             //cod 201 (criado)         objeto u na resposta (resultado)
-        return ResponseEntity.status(HttpStatus.CREATED).body(u);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(usuario));
     }
 
 
@@ -37,8 +37,8 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizar(@PathVariable Integer id, @RequestBody Usuario usuario){
         usuario.setIdUs(id);
-        Usuario u = service.atualizar(usuario);
-        return ResponseEntity.ok(u);
+//        Usuario u = service.atualizar(usuario);
+        return ResponseEntity.ok(service.atualizar(usuario));
     }
 
 
@@ -53,15 +53,15 @@ public class UsuarioController {
     //admin listar usuarios ativos
     @GetMapping
     public ResponseEntity<List<Usuario>> listar() {
-        List<Usuario> usuarios = service.listarAtivos();
-        return ResponseEntity.ok(usuarios); //ResponseEntity.status(HttpStatus.OK) = 200
+//        List<Usuario> usuarios = service.listarAtivos();
+        return ResponseEntity.ok(service.listarAtivos()); //ResponseEntity.status(HttpStatus.OK) = 200
     }
 
 
     //admin buscar usuario por id
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id){
-        Usuario u = service.getUsuarioById(id);
-        return ResponseEntity.ok(u);
+//        Usuario u = service.getUsuarioById(id);
+        return ResponseEntity.ok(service.getUsuarioById(id));
     }
 }

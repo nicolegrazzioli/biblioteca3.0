@@ -35,14 +35,14 @@ public class EmprestimoController {
      */
     @GetMapping
     public ResponseEntity<List<Emprestimo>> listar(@RequestParam Integer idUsuario) {
-        List<Emprestimo> emprestimos =  emprestimoService.listar(idUsuario);
-        return ResponseEntity.ok(emprestimos); //200
+//        List<Emprestimo> emprestimos =  emprestimoService.listar(idUsuario);
+        return ResponseEntity.ok(emprestimoService.listar(idUsuario)); //200
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Emprestimo> buscarPorId(@PathVariable Integer id) {
-        Emprestimo emprestimo = emprestimoService.buscarPorId(id);
-        return ResponseEntity.ok(emprestimo); //200
+//        Emprestimo emprestimo = emprestimoService.buscarPorId(id);
+        return ResponseEntity.ok(emprestimoService.buscarPorId(id)); //200
     }
 
     /*
@@ -52,6 +52,12 @@ public class EmprestimoController {
     public ResponseEntity<Emprestimo> salvar(@RequestBody EmprestimoDTO emprestimoDTO) {
         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO.getLivroEmp(), emprestimoDTO.getUsuarioEmp());
         return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
+    }
+
+
+    @PutMapping("{id}/devolver")
+    public ResponseEntity<Emprestimo> devolver(@PathVariable Integer id) {
+        return ResponseEntity.ok(emprestimoService.devolver(id));
     }
 
 

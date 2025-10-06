@@ -39,7 +39,7 @@ public class EmprestimoService {
     //consulta
     public List<Emprestimo> listar(Integer idUsuarioLogado) {
         Usuario uLogado = usuarioRepository.findById(idUsuarioLogado).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        if (uLogado.getTipoUs().equals("ADMIN")) {
+        if ("ADMIN".equals(uLogado.getTipoUs())) {
             //se for ADMIN, ve todos emprestimos de todos os usuarios
             return this.emprestimoRepository.findAll();
         } else {
@@ -59,24 +59,24 @@ public class EmprestimoService {
     //criar e devolver
     @Transactional //todas operações no banco são feitas em 1 transação
     public Emprestimo criarEmprestimo(Integer idLivro, Integer idUsuario) {
-        Livro livro = this.livroRepository.findById(idLivro).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
-        Usuario usuario = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Livro l = this.livroRepository.findById(idLivro).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        Usuario u = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         //regra de negocio
-        if (!livro.isAtivoLiv()) {
+        if (!l.isAtivoLiv()) {
             throw new RuntimeException("O livro não está disponível: está inativo");
         }
-        if (!livro.isDisponivelLiv()) {
+        if (!l.isDisponivelLiv()) {
             throw new RuntimeException("O livro não está disponível: está emprestado");
         }
 
-        livro.setDisponivelLiv(false);
-        this.livroRepository.save(livro); //salva alteração
+        l.setDisponivelLiv(false);
+        this.livroRepository.save(l); //salva alteração
 
         //novo emprestimo
-        Emprestimo e = new  Emprestimo();
-        e.setLivroEmp(livro);
-        e.setUsuarioEmp(usuario);
+        Emprestimo e = new Emprestimo();
+        e.setLivroEmp(l);
+        e.setUsuarioEmp(u);
         e.setDataEmprestimoEmp(LocalDate.now());
         e.setDataDevolucaoPrevistaEmp(LocalDate.now().plusDays(14));
         e.setStatusEmp("ATIVO");

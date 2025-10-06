@@ -5,13 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "livro")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties("hibernateLazyInitializer")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,16 +29,20 @@ public class Livro {
     @Column(name = "ano_publicacao_liv", nullable = false)
     private int anoPublicacaoLiv;
 
-//    @NonNull
-//    private int id_autor_liv;
-    // mapeia relacionamento com autor
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_autor_liv")
-    private Autor autorLiv;
-
     @Column(name = "disponivel_liv", nullable = false)
     private boolean disponivelLiv;
 
     @Column(name = "ativo_liv", nullable = false)
     private boolean ativoLiv;
+
+//    @NonNull
+//    private int id_autor_liv;
+    // mapeia relacionamento com autor
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "livro_autor",
+            joinColumns = @JoinColumn(name = "id_livro"),
+            inverseJoinColumns = @JoinColumn(name = "id_autor")
+    )
+    private Set<Autor> autores;
 }
