@@ -2,8 +2,18 @@ package br.csi.biblioteca.model.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+/**
+ * @NotBlank -- strings (valor valido)
+ * @NotNull -- não strings
+ * @Email
+ * @Size(min, max)
+ * @Past -- data informada deve ser passado
+ */
 @Entity
 @Table(name = "usuario")
 @Getter
@@ -17,18 +27,23 @@ public class Usuario {
     @Column(name = "id_us")
     private int idUs;
 
+    @Email
     @Column(name = "email_us", unique = true, nullable = false)
     private String emailUs;
 
+    @NotBlank(message = "Insira uma senha")
     @Column(name = "senha_us", nullable = false)
     private String senhaUs;
 
+    @NotBlank(message = "O usuario deve ter nome")
     @Column(name = "nome_us", nullable = false)
     private String nomeUs;
 
+    @NotNull
     @Column(name = "ativo_us")
     private boolean ativoUs;
 
+    @NotNull
     @Column(name = "tipo_us", nullable = false)
     private String tipoUs;
 }

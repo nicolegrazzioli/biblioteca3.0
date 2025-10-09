@@ -85,6 +85,20 @@ public class EmprestimoService {
     }
 
     @Transactional
+    public Emprestimo renovar(Integer id) {
+        Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+        if (!e.getStatusEmp().equals("ATIVO")) {
+            throw new RuntimeException("O empréstimo não pode ser renovado pois não está ativo");
+        }
+
+        //atualiza data de devolucao prevista
+        e.setDataDevolucaoPrevistaEmp(LocalDate.now().plusDays(14));
+
+        return this.emprestimoRepository.save(e);
+
+    }
+
+    @Transactional
     public Emprestimo devolver(Integer id) {
         Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
         if (!e.getStatusEmp().equals("ATIVO")) {

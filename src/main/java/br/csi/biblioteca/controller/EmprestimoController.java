@@ -61,6 +61,12 @@ public class EmprestimoController {
     }
 
 
+    @PutMapping("{id}/renovar")
+    public ResponseEntity<Emprestimo> renovar(@PathVariable Integer id) {
+        return ResponseEntity.ok(emprestimoService.renovar(id));
+    }
+
+
 
 
 

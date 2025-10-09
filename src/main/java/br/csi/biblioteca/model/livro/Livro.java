@@ -3,10 +3,18 @@ package br.csi.biblioteca.model.livro;
 import br.csi.biblioteca.model.autor.Autor;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.Set;
 
+/**
+ * @NotBlank -- strings (valor valido)
+ * @NotNull -- não strings
+ * @Email
+ * @Size(min, max)
+ * @Past -- data informada deve ser passado
+ */
 @Entity
 @Table(name = "livro")
 @Getter
@@ -20,13 +28,14 @@ public class Livro {
     @Column(name = "id_liv")
     private int idLiv;
 
+    @NotBlank(message = "O livro deve ter um nome")
     @Column(name = "titulo_liv", nullable = false)
     private String tituloLiv;
 
-    @Column(name = "isbn_liv", unique = true, nullable = false)
+    @Column(name = "isbn_liv", unique = true)
     private String isbnLiv;
 
-    @Column(name = "ano_publicacao_liv", nullable = false)
+    @Column(name = "ano_publicacao_liv")
     private int anoPublicacaoLiv;
 
     @Column(name = "disponivel_liv", nullable = false)
