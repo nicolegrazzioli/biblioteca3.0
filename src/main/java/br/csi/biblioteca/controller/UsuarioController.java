@@ -1,11 +1,15 @@
 package br.csi.biblioteca.controller;
 
+import br.csi.biblioteca.model.usuario.DadosUsuario;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 //ok
 /** status
@@ -22,14 +26,27 @@ public class UsuarioController {
         this.service = service;
     }
 
+
     //criar ususario
     @PostMapping("/registrar")
 //    public void salvar(@RequestBody Usuario usuario) { this.service.salvar(usuario); }
                                             //pega o json e transforma em um objeto Usuario
-    public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){ //retorna resposta http completa, com objeto Usuario
+    public ResponseEntity<DadosUsuario> salvar(@RequestBody @Valid Usuario usuario, UriComponentsBuilder uriBuilder){ //retorna resposta http completa, com objeto Usuario
 //        Usuario u = service.salvar(usuario);
             //cod 201 (criado)         objeto u na resposta (resultado)
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(usuario));
+//        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(usuario));
+
+        DadosUsuario usuarioCriado = service.salvar(usuario);
+        URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuario.getIdUs()).toUri();
+        return ResponseEntity.created(uri).body(usuarioCriado);
+        /*{
+            "emailUs": "aut@aut",
+            "senhaUs": "aut",
+            "nomeUs": "aut",
+            "ativoUs": "true",
+            "tipoUs": "USUARIO",
+            "permissao": "role_usuario"
+        }*/
     }
 
 
@@ -52,7 +69,7 @@ public class UsuarioController {
 
     //admin listar usuarios ativos
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar() {
+    public ResponseEntity<List<DadosUsuario>> listar() {
 //        List<Usuario> usuarios = service.listarAtivos();
         return ResponseEntity.ok(service.listarAtivos()); //ResponseEntity.status(HttpStatus.OK) = 200
     }
@@ -60,7 +77,7 @@ public class UsuarioController {
 
     //admin buscar usuario por id
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<DadosUsuario> buscarPorId(@PathVariable Integer id){
 //        Usuario u = service.getUsuarioById(id);
         return ResponseEntity.ok(service.getUsuarioById(id));
     }

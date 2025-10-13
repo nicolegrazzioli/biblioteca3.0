@@ -26,3 +26,6 @@
 > - [ ] Tratamento de erros
 
 - [ ] Coleção de endpoits para teste feitas no insomia ou postman (1)
+- [ ] Spring Security
+> - [x] Autenticação: criar usuário (/login), validar token no https://www.jwt.io/
+> - [ ] Autorização: se pode acessar cada endpoint

@@ -1,11 +1,17 @@
 package br.csi.biblioteca.service;
 
+import br.csi.biblioteca.model.usuario.DadosUsuario;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.model.usuario.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UsuarioService {
@@ -14,7 +20,8 @@ public class UsuarioService {
         this.repository = repository;
     }
 
-    public Usuario autenticar(String email, String senha){
+    //autenticar - nao usada
+    /*public Usuario autenticar(String email, String senha){
         Usuario u = this.repository.findByEmailUs(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         if (u.getSenhaUs().equals(senha)){
@@ -22,14 +29,14 @@ public class UsuarioService {
         } else {
             throw new RuntimeException("Senha incorreta");
         }
-    }
+    }*/
 
     //crud
-    public Usuario salvar(Usuario usuario){
-        //regra de negocio: sempre do tipo 'usuário'
-        usuario.setTipoUs("USUARIO");
+    public DadosUsuario salvar(Usuario usuario){
+        usuario.setTipoUs("USUARIO"); //regra de negocio: sempre do tipo 'usuário'
+        usuario.setSenhaUs(new BCryptPasswordEncoder().encode(usuario.getSenhaUs()));
         usuario.setAtivoUs(true);
-        return repository.save(usuario);
+        return new DadosUsuario(repository.save(usuario));
     }
 
     public Usuario atualizar(Usuario usuario) {
@@ -54,11 +61,13 @@ public class UsuarioService {
     }
 
     //consulta
-    public List<Usuario> listarAtivos(){
-        return repository.findByAtivoUsIsTrue();
+    public List<DadosUsuario> listarAtivos(){
+        return repository.findByAtivoUsIsTrue().stream().map(DadosUsuario::new).toList();
     }
 
-    public Usuario getUsuarioById(Integer id){
-        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não enocntrado"));
+    public DadosUsuario getUsuarioById(Integer id){
+        Usuario usuario = this.repository.getReferenceById(id);
+        return new DadosUsuario(usuario);
+//        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não enocntrado"));
     }
 }

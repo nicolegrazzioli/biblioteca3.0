@@ -1,6 +1,7 @@
 package br.csi.biblioteca.model.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +15,7 @@ import lombok.*;
  * @Size(min, max)
  * @Past -- data informada deve ser passado
  */
-@Entity
+@Entity(name = "Usuario")
 @Table(name = "usuario")
 @Getter
 @Setter
@@ -25,6 +26,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_us")
+    @Schema(description = "ID único do usuário", example = "1")
     private int idUs;
 
     @Email
@@ -46,4 +48,6 @@ public class Usuario {
     @NotNull
     @Column(name = "tipo_us", nullable = false)
     private String tipoUs;
+
+    private String permissao;
 }
