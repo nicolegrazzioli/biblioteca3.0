@@ -32,11 +32,12 @@ public class UsuarioService {
     }*/
 
     //crud
-    public DadosUsuario salvar(Usuario usuario){
-        usuario.setTipoUs("USUARIO"); //regra de negocio: sempre do tipo 'usuário'
+    public Usuario salvar(Usuario usuario){
+        usuario.setTipoUs("USUARIO");
         usuario.setSenhaUs(new BCryptPasswordEncoder().encode(usuario.getSenhaUs()));
         usuario.setAtivoUs(true);
-        return new DadosUsuario(repository.save(usuario));
+        usuario.setPermissao("ROLE_USUARIO");
+        return repository.save(usuario);
     }
 
     public Usuario atualizar(Usuario usuario) {
@@ -65,9 +66,7 @@ public class UsuarioService {
         return repository.findByAtivoUsIsTrue().stream().map(DadosUsuario::new).toList();
     }
 
-    public DadosUsuario getUsuarioById(Integer id){
-        Usuario usuario = this.repository.getReferenceById(id);
-        return new DadosUsuario(usuario);
-//        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não enocntrado"));
+    public Usuario getUsuarioById(Integer id){
+        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 }

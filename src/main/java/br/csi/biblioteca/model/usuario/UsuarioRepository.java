@@ -8,7 +8,6 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> findByAtivoUsIsTrue();
 
-    //Optional -- pesquisa que pode retornar null
     Usuario findByEmailUs(String email);
 
 }

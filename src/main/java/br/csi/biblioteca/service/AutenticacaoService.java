@@ -20,13 +20,7 @@ public class AutenticacaoService implements UserDetailsService {
 
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuario nao encontrado");
-        } else {
-            UserDetails user = User.withUsername(usuario.getEmailUs())
-                    .password(usuario.getSenhaUs())
-                    .authorities(usuario.getPermissao())
-                    .build();
-
-            return user;
         }
+        return usuario;
     }
 }

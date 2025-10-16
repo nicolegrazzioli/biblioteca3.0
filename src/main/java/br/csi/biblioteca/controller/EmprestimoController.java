@@ -5,6 +5,7 @@ import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.EmprestimoService;
 import br.csi.biblioteca.service.LivroService;
 import br.csi.biblioteca.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class EmprestimoController {
     RequestBody - pega o conteudo (json) e coloca numa variavel
      */
     @PostMapping("/registrar")
-    public ResponseEntity<Emprestimo> salvar(@RequestBody EmprestimoDTO emprestimoDTO) {
+    public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO.getLivroEmp(), emprestimoDTO.getUsuarioEmp());
         return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
     }

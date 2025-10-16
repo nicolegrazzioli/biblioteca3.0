@@ -1,6 +1,7 @@
 package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.usuario.DadosAutenticacao;
+import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.TokenServiceJWT;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +24,28 @@ public class AutenticacaoController {
     private final TokenServiceJWT tokenService;
 
     @PostMapping
-    public ResponseEntity login(@RequestBody DadosAutenticacao dados) {
-        try {
-            Authentication autenticado = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
-            //regitra no manager
-            Authentication at = manager.authenticate(autenticado);
+    public ResponseEntity<?> login(@RequestBody DadosAutenticacao dados) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        Authentication authentication = manager.authenticate(authenticationToken);
 
-            User user = (User) at.getPrincipal();
-            String token = tokenService.gerarToken(user);
+        // Se a autenticação for bem-sucedida, o Spring retorna o objeto UserDetails (nosso Usuario)
+        var usuario = (Usuario) authentication.getPrincipal();
+        String token = tokenService.gerarToken(usuario);
 
-            return ResponseEntity.ok().body(token);
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(token);
+//        try {
+//            Authentication autenticado = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+//            //regitra no manager
+//            Authentication at = manager.authenticate(autenticado);
+//
+//            User user = (User) at.getPrincipal();
+//            String token = tokenService.gerarToken(user);
+//
+//            return ResponseEntity.ok().body(token);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
     }
 
 }

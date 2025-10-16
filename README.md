@@ -20,9 +20,7 @@
 - [ ] Boas práticas REST (1,5)
 
 > - [ ] Spring Validation
-
 > - [x] Tratamento de retornos
-
 > - [ ] Tratamento de erros
 
 - [ ] Coleção de endpoits para teste feitas no insomia ou postman (1)

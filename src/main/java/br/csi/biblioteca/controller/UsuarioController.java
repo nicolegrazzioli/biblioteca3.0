@@ -31,14 +31,15 @@ public class UsuarioController {
     @PostMapping("/registrar")
 //    public void salvar(@RequestBody Usuario usuario) { this.service.salvar(usuario); }
                                             //pega o json e transforma em um objeto Usuario
-    public ResponseEntity<DadosUsuario> salvar(@RequestBody @Valid Usuario usuario, UriComponentsBuilder uriBuilder){ //retorna resposta http completa, com objeto Usuario
+    public ResponseEntity<DadosUsuario> salvar(@Valid @RequestBody Usuario usuario, UriComponentsBuilder uriBuilder){ //retorna resposta http completa, com objeto Usuario
 //        Usuario u = service.salvar(usuario);
             //cod 201 (criado)         objeto u na resposta (resultado)
 //        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(usuario));
 
-        DadosUsuario usuarioCriado = service.salvar(usuario);
+        Usuario usuarioSalvo = service.salvar(usuario);
+        DadosUsuario dadosUsuario = new DadosUsuario(usuarioSalvo);
         URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuario.getIdUs()).toUri();
-        return ResponseEntity.created(uri).body(usuarioCriado);
+        return ResponseEntity.created(uri).body(dadosUsuario);
         /*{
             "emailUs": "aut@aut",
             "senhaUs": "aut",
@@ -52,10 +53,10 @@ public class UsuarioController {
 
     //admin atualizae um usuario
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizar(@PathVariable Integer id, @RequestBody Usuario usuario){
+    public ResponseEntity<DadosUsuario> atualizar(@PathVariable Integer id, @Valid @RequestBody Usuario usuario){
         usuario.setIdUs(id);
-//        Usuario u = service.atualizar(usuario);
-        return ResponseEntity.ok(service.atualizar(usuario));
+        Usuario usuarioAtualizado = service.atualizar(usuario);
+        return ResponseEntity.ok(new DadosUsuario(usuarioAtualizado));
     }
 
 
@@ -78,7 +79,7 @@ public class UsuarioController {
     //admin buscar usuario por id
     @GetMapping("/{id}")
     public ResponseEntity<DadosUsuario> buscarPorId(@PathVariable Integer id){
-//        Usuario u = service.getUsuarioById(id);
-        return ResponseEntity.ok(service.getUsuarioById(id));
+        Usuario u = service.getUsuarioById(id);
+        return ResponseEntity.ok(new DadosUsuario(u));
     }
 }

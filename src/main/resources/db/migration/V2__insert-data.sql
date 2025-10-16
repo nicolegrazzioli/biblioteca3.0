@@ -1,10 +1,10 @@
 -- Inserts para a tabela 'usuario'
-INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us) VALUES
-                                                               ('Admin Geral', 'admin@email.com', 'admin123', 'ADMIN'),
-                                                               ('Ana Silva', 'ana.silva@email.com', 'usuario123', 'USUARIO'),
-                                                               ('Bruno Costa', 'bruno.costa@email.com', 'usuario123', 'USUARIO'),
-                                                               ('Carla Dias', 'carla.dias@email.com', 'usuario123', 'USUARIO'),
-                                                               ('Daniel Farias', 'daniel.farias@email.com', 'usuario123', 'USUARIO');
+INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, permissao) VALUES
+                                                                          ('Admin Geral', 'admin@email.com', '$2a$10$34vD.3qYAY4aU.32t.3GuO.2lYqa.i6235v/42.qg4Z2SYe8PUdC.', 'ADMIN', 'ROLE_ADMIN'),
+                                                                          ('Ana Silva', 'ana.silva@email.com', '$2a$10$x50.pa2xQJg.PACCg3i1W.i2gt6zEA0C24B/C8nt5zJ5222b405rG', 'USUARIO', 'ROLE_USUARIO'),
+                                                                          ('Bruno Costa', 'bruno.costa@email.com', '$2a$10$x50.pa2xQJg.PACCg3i1W.i2gt6zEA0C24B/C8nt5zJ5222b405rG', 'USUARIO', 'ROLE_USUARIO'),
+                                                                          ('Carla Dias', 'carla.dias@email.com', '$2a$10$x50.pa2xQJg.PACCg3i1W.i2gt6zEA0C24B/C8nt5zJ5222b405rG', 'USUARIO', 'ROLE_USUARIO'),
+                                                                          ('Daniel Farias', 'daniel.farias@email.com', '$2a$10$x50.pa2xQJg.PACCg3i1W.i2gt6zEA0C24B/C8nt5zJ5222b405rG', 'USUARIO', 'ROLE_USUARIO');
 
 -- Inserts para a tabela 'autor'
 INSERT INTO autor (nome_aut, nacionalidade_aut, data_nascimento_aut) VALUES

@@ -2,6 +2,7 @@ package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.service.AutorService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,13 @@ public class AutorController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<Autor> salvar(@RequestBody Autor autor) {
+    public ResponseEntity<Autor> salvar(@Valid @RequestBody Autor autor) {
 //        Autor a = service.salvar(autor);
         return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(autor));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Autor> atualizar(@PathVariable Integer id, @RequestBody Autor autor) {
+    public ResponseEntity<Autor> atualizar(@PathVariable Integer id, @Valid @RequestBody Autor autor) {
 //        Autor a = service.atualizar(autor);
         autor.setIdAut(id);
         return ResponseEntity.ok(service.atualizar(autor));

@@ -4,6 +4,7 @@ import br.csi.biblioteca.model.livro.Livro;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.AutorService;
 import br.csi.biblioteca.service.LivroService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,13 +46,13 @@ public class LivroController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<Livro> salvar(@RequestBody LivroDTO livroDTO) {
+    public ResponseEntity<Livro> salvar(@Valid @RequestBody LivroDTO livroDTO) {
 //        Livro novo =  livroService.salvar(livro);
         return ResponseEntity.status(HttpStatus.CREATED).body(livroService.salvar(livroDTO)); //201
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Livro> atualizar(@PathVariable Integer id, @RequestBody LivroDTO livroDTO){
+    public ResponseEntity<Livro> atualizar(@PathVariable Integer id, @Valid @RequestBody LivroDTO livroDTO){
         livroDTO.setIdLiv(id);
 //        Livro l =  livroService.atualizar(livro);
         return ResponseEntity.ok(livroService.atualizar(livroDTO)); //200
