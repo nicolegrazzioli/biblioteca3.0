@@ -58,8 +58,76 @@ Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários,
 
 
 ### Funcionalidades
-Autenticação (```/login```)
-- ```POST /login``` recebe
+* Autenticação (```/login```)
+  * `POST /login`: Recebe `DadosAutenticacao` (login/senha), valida as credenciais no `AuthenticationManager` (Spring Security) e retorna um token JWT se der tudo certo
+
+* Usuários (`/usuarios`)
+    * `POST /usuarios/registrar`: Endpoint público para criação de novos usuários (default: `USUARIO`), a senha é criptografada com `BCryptPasswordEncoder` e depois é salva no banco de dados
+    * `GET /usuarios`: Lista todos os usuários ativos (requer autenticação), retorna `DadosUsuario` (DTO) para não expor a senha
+    * `GET /usuarios/{id}`: Busca um usuário por ID (requer autenticação) e retorna `DadosUsuario`
+    * `PUT /usuarios/{id}`: Atualiza dados de um usuário (requer autenticação) 
+    * `DELETE /usuarios/{id}`: Exclui um usuário (requer permissão de ADMIN)
+
+* Autores (`/autores`)
+    * Endpoints de CRUD (`GET`, `GET /{id}`, `POST /registrar`, `PUT /{id}`, `DELETE /{id}`)
+    * Operações de escrita (`POST`, `PUT`, `DELETE`), requer permissão de ADMIN
+
+* Livros (`/livros`)
+    * `GET /livros`: Lista todos os livros *ativos* (requer autenticação)
+    * `GET /livros/all`: Lista *todos* os livros, incluindo os inativos - soft delete (requer autenticação)
+    * `GET /livros/{id}`: Busca um livro por ID (requer autenticação)
+    * `POST /livros/registrar`: Cria um novo livro, recebe um `LivroDTO` com os dados do livro e o(s) ID(s) do(s) autor(es), requer permissão de ADMIN
+    * `PUT /livros/{id}`: Atualiza um livro existente, recebe um `LivroDTO` (requer permissão de ADMIN)
+    * `DELETE /livros/{id}`: Faz um *soft delete* do livro (define `ativoLiv = false`), requer permissão de ADMIN
+
+* Empréstimos (`/emprestimos`)
+    * `GET /emprestimos`: Lista os empréstimos, recebe `idUsuario` como parâmetro (`?usuarioId = x`) - se o usuário for ADMIN, retorna todos os empréstimos; se for USUARIO comum, retorna apenas os seus
+    * `GET /emprestimos/{id}`: Busca um empréstimo por ID (requer autenticação)
+    * `POST /emprestimos/registrar`: Cria um novo empréstimo, recebe um `EmprestimoDTO` com `idLivro` e `idUsuario` (requer autenticação) 
+    * `PUT /emprestimos/{id}/devolver`: Registra a devolução de um empréstimo (requer autenticação) 
+    * `PUT /emprestimos/{id}/renovar`: Renova a data de devolução prevista de um empréstimo (requer autenticação) 
+
+
+### Regras de negócio
+* Criação de usuário: novos usuários registrados via API sempre recebem o tipo `USUARIO` e a permissão `ROLE_USUARIO`, com status `ativoUs = true`755]
+* Senhas são criptografadas e depois salvas no banco de dados
+* Empréstimos:
+    * Só é possível emprestar um livro se ele estiver `ativoLiv = true` e `disponivelLiv = true` 
+    * Ao criar um empréstimo, o livro é marcado como `disponivelLiv = false` e com status `ATIVO`
+    * A data de devolução prevista é calculada como 14 dias após a data do empréstimo
+    * Ao devolver, o livro é marcado como `disponivelLiv = true`, o status do empréstimo muda para `CONCLUIDO` e a data de devolução efetiva (atual) é registrada
+* Deletes:
+    * Livros: Utiliza *soft delete* (`ativoLiv = false`)
+    * Um livro não pode ser inativado se estiver emprestado (`disponivelLiv = false`)
+    * Autores: Não podem ser excluídos se possuírem livros associados (`FOREIGN KEY` + `ON DELETE RESTRICT` tratado no `AutorService` com `DataIntegrityViolationException`)
+    * Usuários: Não podem ser excluídos se possuírem empréstimos associados (`FOREIGN KEY` e tratado no `UsuarioService` com `DataIntegrityViolationException`)
+* Usuários
+  * Todo usuário criado pelo endpoint é do tipo USUARIO
+
+
+### Segurança (Spring Security)
+**Autenticação**
+* O endpoint `POST /login` utiliza o `AuthenticationManager` para validar as credenciais (`DadosAutenticacao`)
+* Em caso de sucesso, o `TokenServiceJWT` gera um token JWT contendo o email do usuário (subject) e sua permissão (ROLE)
+
+**Autorização -** `SecurityConfig`
+* `/login`, `/usuarios/registrar` e endpoints do Swagger são públicos (`permitAll`)
+* Operações de exclusão (`DELETE`) e escrita (`POST`, `PUT`) em `autores` e `livros` exigem a permissão `ROLE_ADMIN` (`hasRole("ADMIN")`)
+* As demais requisições exigem apenas que o usuário esteja autenticado (`authenticated()`)
+
+**Filtro de Token**
+* A classe `FiltroToken` intercepta cada requisição
+* extrai o token JWT do cabeçalho `Authorization`
+* valida o token usando o `TokenServiceJWT`
+* carrega os dados do usuário (`UserDetails`) pelo `AutenticacaoService`
+* estabelece o contexto de segurança para a requisição
+
+
+### Boas Práticas REST 
+* Tratamento de Retornos: Todos os endpoints dos controllers retornam `ResponseEntity` (códigos de status HTTP)
+* Validação de Dados: As entidades e DTOs utilizam anotações do Spring Validation (`@NotBlank`, `@NotNull`, `@Email`, `@Past`, `@NotEmpty`, `@Valid`)
+* Tratamento de Erros: Exceções específicas (`RecursoNaoEncontradoException`, `RegraDeNegocioException`) são lançadas pelos `Services` para erros específicos -- a classe `RestExceptionHandler` (`@RestControllerAdvice`) intercepta essas exceções e retorna respostas JSON com os status HTTP (`404 Not Found`, `400 Bad Request`)
+* DTOs: Classes DTO (`LivroDTO`, `EmprestimoDTO`, `DadosUsuario`, `DadosAutenticacao`) são utilizadas para "separar" a API das entidades internas e controlar o fluxo dos dados
 
 
 
