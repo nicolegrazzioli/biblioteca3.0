@@ -3,6 +3,8 @@ package br.csi.biblioteca.service;
 import br.csi.biblioteca.model.usuario.DadosUsuario;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.model.usuario.UsuarioRepository;
+import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
+import br.csi.biblioteca.service.exception.RegraDeNegocioException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,7 +44,7 @@ public class UsuarioService {
 
     public Usuario atualizar(Usuario usuario) {
         //busca usuario no banco
-        Usuario usuarioBanco = this.repository.findById(usuario.getIdUs()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Usuario usuarioBanco = this.repository.findById(usuario.getIdUs()).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
 
         //atualiza
         usuarioBanco.setNomeUs(usuario.getNomeUs());
@@ -57,7 +59,7 @@ public class UsuarioService {
             this.repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             //se tiver emprestimos ativos
-            throw new RuntimeException("O usuário não pode ser excluído pois tem empréstimos ativos");
+            throw new RegraDeNegocioException("O usuário não pode ser excluído pois tem empréstimos ativos");
         }
     }
 
@@ -67,6 +69,6 @@ public class UsuarioService {
     }
 
     public Usuario getUsuarioById(Integer id){
-        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return this.repository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
     }
 }

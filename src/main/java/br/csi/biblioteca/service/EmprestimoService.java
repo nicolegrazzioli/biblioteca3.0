@@ -7,6 +7,8 @@ import br.csi.biblioteca.model.livro.Livro;
 import br.csi.biblioteca.model.livro.LivroRepository;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.model.usuario.UsuarioRepository;
+import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
+import br.csi.biblioteca.service.exception.RegraDeNegocioException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,7 @@ public class EmprestimoService {
 
     //consulta
     public List<Emprestimo> listar(Integer idUsuarioLogado) {
-        Usuario uLogado = usuarioRepository.findById(idUsuarioLogado).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Usuario uLogado = usuarioRepository.findById(idUsuarioLogado).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
         if ("ADMIN".equals(uLogado.getTipoUs())) {
             //se for ADMIN, ve todos emprestimos de todos os usuarios
             return this.emprestimoRepository.findAll();
@@ -53,21 +55,21 @@ public class EmprestimoService {
 //    }
 
     public Emprestimo buscarPorId(Integer id) {
-        return this.emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+        return this.emprestimoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Empréstimo não encontrado"));
     }
 
     //criar e devolver
     @Transactional //todas operações no banco são feitas em 1 transação
     public Emprestimo criarEmprestimo(Integer idLivro, Integer idUsuario) {
-        Livro l = this.livroRepository.findById(idLivro).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
-        Usuario u = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        Livro l = this.livroRepository.findById(idLivro).orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
+        Usuario u = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
 
         //regra de negocio
         if (!l.isAtivoLiv()) {
-            throw new RuntimeException("O livro não está disponível: está inativo");
+            throw new RegraDeNegocioException("O livro não está disponível: está inativo");
         }
         if (!l.isDisponivelLiv()) {
-            throw new RuntimeException("O livro não está disponível: está emprestado");
+            throw new RegraDeNegocioException("O livro não está disponível: está emprestado");
         }
 
         l.setDisponivelLiv(false);
@@ -86,9 +88,9 @@ public class EmprestimoService {
 
     @Transactional
     public Emprestimo renovar(Integer id) {
-        Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+        Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Empréstimo não encontrado"));
         if (!e.getStatusEmp().equals("ATIVO")) {
-            throw new RuntimeException("O empréstimo não pode ser renovado pois não está ativo");
+            throw new RegraDeNegocioException("O empréstimo não pode ser renovado pois não está ativo");
         }
 
         //atualiza data de devolucao prevista
@@ -100,9 +102,9 @@ public class EmprestimoService {
 
     @Transactional
     public Emprestimo devolver(Integer id) {
-        Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+        Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Empréstimo não encontrado"));
         if (!e.getStatusEmp().equals("ATIVO")) {
-            throw new RuntimeException("O empréstimo não pode ser devolvido pois não está ativo");
+            throw new RegraDeNegocioException("O empréstimo não pode ser devolvido pois não está ativo");
         }
 
         //atualiza estado do livro

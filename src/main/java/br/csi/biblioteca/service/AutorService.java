@@ -2,6 +2,8 @@ package br.csi.biblioteca.service;
 
 import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.model.autor.AutorRepository;
+import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
+import br.csi.biblioteca.service.exception.RegraDeNegocioException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +26,14 @@ public class AutorService {
     }
 
     public Autor getAutor(int id) {
-        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+        return this.repository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Autor não encontrado"));
     }
 
     public void excluir(int id) {
         try {
             this.repository.deleteById(id);
         } catch(DataIntegrityViolationException e) {
-            throw new RuntimeException("Erro: o autor não pode ser excluído pois possui livros cadastrados");
+            throw new RegraDeNegocioException("Erro: o autor não pode ser excluído pois possui livros cadastrados");
         }
     }
 

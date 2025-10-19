@@ -5,6 +5,8 @@ import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.model.autor.AutorRepository;
 import br.csi.biblioteca.model.livro.Livro;
 import br.csi.biblioteca.model.livro.LivroRepository;
+import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
+import br.csi.biblioteca.service.exception.RegraDeNegocioException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ public class LivroService {
     }
 
     public Livro getLivroById(int id){
-        return livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        return livroRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
     }
 
 
@@ -44,7 +46,7 @@ public class LivroService {
         //busca autor(es)
         Set<Autor> autores = new HashSet<>(autorRepository.findAllById(livroDTO.getAutoresIds()));
         if(autores.isEmpty()){
-            throw new RuntimeException("O livro deve ter pelo menos um autor");
+            throw new RegraDeNegocioException("O livro deve ter pelo menos um autor");
         }
 
         Livro livro = new Livro();
@@ -61,10 +63,10 @@ public class LivroService {
 
     @Transactional
     public Livro atualizar(LivroDTO livroDTO){
-        Livro livroBanco = livroRepository.findById(livroDTO.getIdLiv()).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        Livro livroBanco = livroRepository.findById(livroDTO.getIdLiv()).orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
         Set<Autor> autores = new HashSet<>(autorRepository.findAllById(livroDTO.getAutoresIds()));
         if(autores.isEmpty()){
-            throw new RuntimeException("O livro deve ter pelo menos um autor");
+            throw new RegraDeNegocioException("O livro deve ter pelo menos um autor");
         }
 
         //atualiza livro
@@ -79,11 +81,11 @@ public class LivroService {
 
     @Transactional
     public void excluir(int id){
-        Livro l = this.livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        Livro l = this.livroRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
 
         //regra de negocio
         if (!l.isDisponivelLiv()) { //se o livro nao esta disponivel
-            throw new RuntimeException("O livro não pode ser excluído pois tem empréstimo ativo");
+            throw new RegraDeNegocioException("O livro não pode ser excluído pois tem empréstimo ativo");
         }
 
         //atualiza livro: soft delete
