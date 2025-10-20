@@ -28,7 +28,7 @@ package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.usuario.DadosAutenticacao;
 import br.csi.biblioteca.model.usuario.Usuario;
-import br.csi.biblioteca.service.TokenServiceJWT;
+import br.csi.biblioteca.infra.security.TokenServiceJWT;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -457,7 +457,7 @@ package br.csi.biblioteca.infra.security;
 
 import br.csi.biblioteca.model.usuario.UsuarioRepository;
 import br.csi.biblioteca.service.AutenticacaoService;
-import br.csi.biblioteca.service.TokenServiceJWT;
+import br.csi.biblioteca.infra.security.TokenServiceJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

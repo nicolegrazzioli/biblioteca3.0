@@ -179,3 +179,6 @@ PUT /autores/{id}
 POST /livros/registrar
 PUT /livros/{id}
 ```
+
+insomnia
+![img.png](img.png)

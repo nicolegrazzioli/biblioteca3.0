@@ -1,5 +1,6 @@
 package br.csi.biblioteca.infra.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,9 +20,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     private final FiltroToken filtroToken;
-    public SecurityConfig(FiltroToken filtroToken) {
+
+    private final AutenticacaoFilter autenticacaoFilter;
+    public SecurityConfig(FiltroToken filtroToken, AutenticacaoFilter autenticacaoFilter) {
         this.filtroToken = filtroToken;
+        this.autenticacaoFilter = autenticacaoFilter;
     }
 
     @Bean
@@ -39,15 +44,19 @@ public class SecurityConfig {
 
                         //deletes - admin
                         .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+
                         //post e put em autores e livros - admin
-                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
 
                         //outras requisiçoes - usuario autenticado
                         .anyRequest().authenticated()
                 )
                 //executar filtro de token antes do filtro de autenticação do spring
-                .addFilterBefore(this.filtroToken, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(this.filtroToken, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(this.autenticacaoFilter, UsernamePasswordAuthenticationFilter.class)
                 .build(); // sessao nao salvs estado do usuario, apenas gera token
     }
 

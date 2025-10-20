@@ -1,4 +1,4 @@
-package br.csi.biblioteca.service;
+package br.csi.biblioteca.infra.security;
 
 //tem algumas infos do usuario, armazenado no cliente
 

@@ -7,51 +7,47 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
 @Component
-public class FiltroToken extends OncePerRequestFilter {
-    private final TokenServiceJWT tokenService;
+public class AutenticacaoFilter extends OncePerRequestFilter {
+    private final TokenServiceJWT tokenServiceJWT;
     private final AutenticacaoService autenticacaoService;
-    public FiltroToken(TokenServiceJWT tokenService, AutenticacaoService autenticacaoService) {
-        this.tokenService = tokenService;
+    public AutenticacaoFilter(TokenServiceJWT tokenServiceJWT, AutenticacaoService autenticacaoService) {
+        this.tokenServiceJWT = tokenServiceJWT;
         this.autenticacaoService = autenticacaoService;
     }
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //tenta pegar token do cabecalho da requisicao
+        System.out.println("filtro para autenticação e autorização");
+
         String token = recuperarToken(request);
+        System.out.println("Token: " + token);
 
-        if (token != null) { //encontrou
-            //valida o token e pega email do usuario
-            String subject = this.tokenService.getSubject(token);
+        if (token != null) {
+            String subject = this.tokenServiceJWT.getSubject(token);
+            System.out.println("Login: " + subject);
 
-            //carregar os detalhes do usuaroi a partir do email
             UserDetails userDetails = this.autenticacaoService.loadUserByUsername(subject);
-
-            //cria autenticacao apra spring security
-            var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            //define o usuario como autenticado na requisicao atual
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
-        //filtros do spring
         filterChain.doFilter(request, response);
+//        String tokenJWT = recuperarToken(request)
     }
 
     private String recuperarToken(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        if (header != null) {
-            //remove prefixo Bearer do token
-            return header.replace("Bearer ", "");
+        String token = request.getHeader("Authorization");
+        if (token != null) {
+            return token.replace("Bearer ", "").trim();
         }
         return null;
     }
-
 }

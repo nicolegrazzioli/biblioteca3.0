@@ -1,18 +1,14 @@
 package br.csi.biblioteca.controller;
 
-import br.csi.biblioteca.model.usuario.DadosAutenticacao;
 import br.csi.biblioteca.model.usuario.Usuario;
-import br.csi.biblioteca.service.TokenServiceJWT;
+import br.csi.biblioteca.infra.security.TokenServiceJWT;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.token.TokenService;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +32,8 @@ public class AutenticacaoController {
             var usuario = (Usuario) authentication.getPrincipal();
             String token = tokenService.gerarToken(usuario);
 
-            return ResponseEntity.ok(token);
+//            return ResponseEntity.ok(token);
+            return ResponseEntity.ok().body(new DadosToken(token));
         } catch (AuthenticationException e) {
             //usuario ou senha invalidos = 401
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou senha incorretos");
@@ -59,5 +56,8 @@ public class AutenticacaoController {
 //            return ResponseEntity.badRequest().body(e.getMessage());
 //        }
     }
+
+    private record DadosAutenticacao(String login, String senha) {}
+    private record DadosToken(String token) {}
 
 }
