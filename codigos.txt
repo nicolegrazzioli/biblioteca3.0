@@ -553,7 +553,7 @@ public class SecurityConfig {
                         //endpoint de registro de usuario]
                         .requestMatchers(HttpMethod.POST, "/usuarios/registrar").permitAll()
                         //documentaçao do swagger
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                         //deletes - admin
                         .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")

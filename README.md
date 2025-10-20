@@ -41,6 +41,7 @@ Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários,
 - Spring Boot Starter Validation - validação nos dados de entrada da API
 - Lombok - getter, setter, construtor
 - Maven - gerenciamento de dependências e build
+- SDK temurin-21
 
 
 ### Banco de dados
@@ -58,38 +59,40 @@ Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários,
 
 
 ### Funcionalidades
-* Autenticação (```/login```)
+* Autenticação (```/login```) - endpoint público
   * `POST /login`: Recebe `DadosAutenticacao` (login/senha), valida as credenciais no `AuthenticationManager` (Spring Security) e retorna um token JWT se der tudo certo
 
-* Usuários (`/usuarios`)
+* Usuários (`/usuarios`) - requer autenticação
     * `POST /usuarios/registrar`: Endpoint público para criação de novos usuários (default: `USUARIO`), a senha é criptografada com `BCryptPasswordEncoder` e depois é salva no banco de dados
-    * `GET /usuarios`: Lista todos os usuários ativos (requer autenticação), retorna `DadosUsuario` (DTO) para não expor a senha
-    * `GET /usuarios/{id}`: Busca um usuário por ID (requer autenticação) e retorna `DadosUsuario`
-    * `PUT /usuarios/{id}`: Atualiza dados de um usuário (requer autenticação) 
+    * `GET /usuarios`: Lista todos os usuários ativos, retorna `DadosUsuario` (DTO) para não expor a senha
+    * `GET /usuarios/{id}`: Busca um usuário por ID e retorna `DadosUsuario`
+    * `PUT /usuarios/{id}`: Atualiza dados de um usuário 
     * `DELETE /usuarios/{id}`: Exclui um usuário (requer permissão de ADMIN)
 
-* Autores (`/autores`)
+* Autores (`/autores`) - requer autenticação
     * Endpoints de CRUD (`GET`, `GET /{id}`, `POST /registrar`, `PUT /{id}`, `DELETE /{id}`)
-    * Operações de escrita (`POST`, `PUT`, `DELETE`), requer permissão de ADMIN
+    * Operações de escrita (`POST`, `PUT`, `DELETE`) requerem permissão de ADMIN
 
-* Livros (`/livros`)
-    * `GET /livros`: Lista todos os livros *ativos* (requer autenticação)
-    * `GET /livros/all`: Lista *todos* os livros, incluindo os inativos - soft delete (requer autenticação)
-    * `GET /livros/{id}`: Busca um livro por ID (requer autenticação)
+* Livros (`/livros`) - requer autenticação
+    * `GET /livros`: Lista todos os livros *ativos*
+    * `GET /livros/all`: Lista *todos* os livros, incluindo os inativos (soft delete)
+    * `GET /livros/{id}`: Busca um livro por ID
     * `POST /livros/registrar`: Cria um novo livro, recebe um `LivroDTO` com os dados do livro e o(s) ID(s) do(s) autor(es), requer permissão de ADMIN
     * `PUT /livros/{id}`: Atualiza um livro existente, recebe um `LivroDTO` (requer permissão de ADMIN)
     * `DELETE /livros/{id}`: Faz um *soft delete* do livro (define `ativoLiv = false`), requer permissão de ADMIN
 
-* Empréstimos (`/emprestimos`)
-    * `GET /emprestimos`: Lista os empréstimos, recebe `idUsuario` como parâmetro (`?usuarioId = x`) - se o usuário for ADMIN, retorna todos os empréstimos; se for USUARIO comum, retorna apenas os seus
-    * `GET /emprestimos/{id}`: Busca um empréstimo por ID (requer autenticação)
-    * `POST /emprestimos/registrar`: Cria um novo empréstimo, recebe um `EmprestimoDTO` com `idLivro` e `idUsuario` (requer autenticação) 
-    * `PUT /emprestimos/{id}/devolver`: Registra a devolução de um empréstimo (requer autenticação) 
-    * `PUT /emprestimos/{id}/renovar`: Renova a data de devolução prevista de um empréstimo (requer autenticação) 
+* Empréstimos (`/emprestimos`) - requer autenticação
+    * `GET /emprestimos`: Lista os empréstimos, recebe `idUsuario` como parâmetro (`?usuarioId = x`)
+      * se o usuário for ADMIN, retorna todos os empréstimos
+      * se for USUARIO comum, retorna apenas os seus
+    * `GET /emprestimos/{id}`: Busca um empréstimo por ID
+    * `POST /emprestimos/registrar`: Cria um novo empréstimo, recebe um `EmprestimoDTO` com `idLivro` e `idUsuario` 
+    * `PUT /emprestimos/{id}/devolver`: Registra a devolução de um empréstimo 
+    * `PUT /emprestimos/{id}/renovar`: Renova a data de devolução prevista de um empréstimo 
 
 
 ### Regras de negócio
-* Criação de usuário: novos usuários registrados via API sempre recebem o tipo `USUARIO` e a permissão `ROLE_USUARIO`, com status `ativoUs = true`755]
+* Criação de usuário: novos usuários registrados via API sempre recebem o tipo `USUARIO` e a permissão `ROLE_USUARIO`, com status `ativoUs = true`
 * Senhas são criptografadas e depois salvas no banco de dados
 * Empréstimos:
     * Só é possível emprestar um livro se ele estiver `ativoLiv = true` e `disponivelLiv = true` 
