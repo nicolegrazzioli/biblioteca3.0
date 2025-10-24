@@ -1,9 +1,9 @@
 ### nome: "primeira_entrega"
 #### atualizações:
 
-- [ ] arquivo .pdf com um descritivo do projeto (1)
+- [x] arquivo .pdf com um descritivo do projeto (1)
 
-- [x] img do modelo ER: (1)
+- [x] img do modelo ER (1)
 
 - [x] Spring boot (1)
 

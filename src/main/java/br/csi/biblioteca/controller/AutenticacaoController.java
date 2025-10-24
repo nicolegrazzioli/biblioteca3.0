@@ -2,6 +2,12 @@ package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.infra.security.TokenServiceJWT;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/login")
 @AllArgsConstructor
+@Tag(name = "Login", description = "Path relacionado a operações de login")
 public class AutenticacaoController {
     private final AuthenticationManager manager;
     private final TokenServiceJWT tokenService;
 
+    @Operation(summary = "Fazer login", description = "Default") //descrição do endpoint
+    @ApiResponses(value = { //respostas possiveis que o endpoint pode retornar + descrição
+            @ApiResponse(responseCode = "200", description = "Login bem sucedido",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DadosToken.class))}), //tipo de retorno e formato do objeto
+            @ApiResponse(responseCode = "401", description = "Usuário ou senha incorretos"),
+            @ApiResponse(responseCode = "500", description = "Erro interno de processamento do login")
+    })
     @PostMapping
     public ResponseEntity<?> login(@RequestBody DadosAutenticacao dados) {
         try {

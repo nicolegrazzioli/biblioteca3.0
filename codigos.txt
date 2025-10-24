@@ -1,9 +1,9 @@
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\.mvn\wrapper\maven-wrapper.properties:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\.mvn\wrapper\maven-wrapper.properties:
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.11/apache-maven-3.9.11-bin.zip
 
 
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\BibliotecaApplication.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\BibliotecaApplication.java:
 package br.csi.biblioteca;
 
 import org.springframework.boot.SpringApplication;
@@ -23,10 +23,9 @@ public class BibliotecaApplication {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\AutenticacaoController.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\AutenticacaoController.java:
 package br.csi.biblioteca.controller;
 
-import br.csi.biblioteca.model.usuario.DadosAutenticacao;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.infra.security.TokenServiceJWT;
 import lombok.AllArgsConstructor;
@@ -34,11 +33,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.token.TokenService;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,7 +58,8 @@ public class AutenticacaoController {
             var usuario = (Usuario) authentication.getPrincipal();
             String token = tokenService.gerarToken(usuario);
 
-            return ResponseEntity.ok(token);
+//            return ResponseEntity.ok(token);
+            return ResponseEntity.ok().body(new DadosToken(token));
         } catch (AuthenticationException e) {
             //usuario ou senha invalidos = 401
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou senha incorretos");
@@ -86,10 +83,13 @@ public class AutenticacaoController {
 //        }
     }
 
+    private record DadosAutenticacao(String login, String senha) {}
+    private record DadosToken(String token) {}
+
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\AutorController.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\AutorController.java:
 package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.autor.Autor;
@@ -148,7 +148,7 @@ public class AutorController {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\EmprestimoController.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\EmprestimoController.java:
 package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.emprestimo.Emprestimo;
@@ -226,7 +226,7 @@ public class EmprestimoController {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\EmprestimoDTO.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\EmprestimoDTO.java:
 package br.csi.biblioteca.controller;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -246,7 +246,7 @@ public class EmprestimoDTO {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\LivroController.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\LivroController.java:
 package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.livro.Livro;
@@ -317,7 +317,7 @@ public class LivroController {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\LivroDTO.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\LivroDTO.java:
 package br.csi.biblioteca.controller;
 
 import jakarta.validation.constraints.NotBlank;
@@ -340,7 +340,7 @@ public class LivroDTO {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\RestExceptionHandler.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\RestExceptionHandler.java:
 package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
@@ -364,7 +364,7 @@ public class RestExceptionHandler {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\UsuarioController.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\controller\UsuarioController.java:
 package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.usuario.DadosUsuario;
@@ -452,12 +452,10 @@ public class UsuarioController {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\infra\security\FiltroToken.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\infra\security\AutenticacaoFilter.java:
 package br.csi.biblioteca.infra.security;
 
-import br.csi.biblioteca.model.usuario.UsuarioRepository;
 import br.csi.biblioteca.service.AutenticacaoService;
-import br.csi.biblioteca.infra.security.TokenServiceJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -465,6 +463,61 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.token.TokenService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+@Component
+public class AutenticacaoFilter extends OncePerRequestFilter {
+    private final TokenServiceJWT tokenServiceJWT;
+    private final AutenticacaoService autenticacaoService;
+    public AutenticacaoFilter(TokenServiceJWT tokenServiceJWT, AutenticacaoService autenticacaoService) {
+        this.tokenServiceJWT = tokenServiceJWT;
+        this.autenticacaoService = autenticacaoService;
+    }
+
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("filtro para autenticação e autorização");
+
+        String token = recuperarToken(request);
+        System.out.println("Token: " + token);
+
+        if (token != null) {
+            String subject = this.tokenServiceJWT.getSubject(token);
+            System.out.println("Login: " + subject);
+
+            UserDetails userDetails = this.autenticacaoService.loadUserByUsername(subject);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        }
+
+        filterChain.doFilter(request, response);
+//        String tokenJWT = recuperarToken(request)
+    }
+
+    private String recuperarToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token != null) {
+            return token.replace("Bearer ", "").trim();
+        }
+        return null;
+    }
+}
+.
+.
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\infra\security\FiltroToken.java:
+package br.csi.biblioteca.infra.security;
+
+import br.csi.biblioteca.service.AutenticacaoService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -515,9 +568,10 @@ public class FiltroToken extends OncePerRequestFilter {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\infra\security\SecurityConfig.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\infra\security\SecurityConfig.java:
 package br.csi.biblioteca.infra.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -537,9 +591,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     private final FiltroToken filtroToken;
-    public SecurityConfig(FiltroToken filtroToken) {
+
+    private final AutenticacaoFilter autenticacaoFilter;
+    public SecurityConfig(FiltroToken filtroToken, AutenticacaoFilter autenticacaoFilter) {
         this.filtroToken = filtroToken;
+        this.autenticacaoFilter = autenticacaoFilter;
     }
 
     @Bean
@@ -557,15 +615,19 @@ public class SecurityConfig {
 
                         //deletes - admin
                         .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+
                         //post e put em autores e livros - admin
-                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
 
                         //outras requisiçoes - usuario autenticado
                         .anyRequest().authenticated()
                 )
                 //executar filtro de token antes do filtro de autenticação do spring
-                .addFilterBefore(this.filtroToken, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(this.filtroToken, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(this.autenticacaoFilter, UsernamePasswordAuthenticationFilter.class)
                 .build(); // sessao nao salvs estado do usuario, apenas gera token
     }
 
@@ -581,7 +643,60 @@ public class SecurityConfig {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\autor\Autor.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\infra\security\TokenServiceJWT.java:
+package br.csi.biblioteca.infra.security;
+
+//tem algumas infos do usuario, armazenado no cliente
+
+import br.csi.biblioteca.model.usuario.Usuario;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+@Service
+public class TokenServiceJWT {
+    private final String KEY = "poo2";
+    public String gerarToken(Usuario user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(KEY); //palavra para descriptografar token
+            return JWT.create()
+                    .withIssuer("API Biblioteca 3.0")
+                    .withSubject(user.getUsername())
+                    .withClaim("ROLE", user.getAuthorities().stream().toList().get(0).toString())
+                    .withExpiresAt(dataExpiracao())
+                    .sign(algorithm);
+
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("Erro ao gerar token", e);
+        }
+    }
+
+    private Instant dataExpiracao() {
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public String getSubject(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(KEY);
+            return JWT.require(algorithm)
+                    .withIssuer("API Biblioteca 3.0")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException e) {
+            throw new RuntimeException("Token inválido ou expirado");
+        }
+    }
+}
+.
+.
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\autor\Autor.java:
 package br.csi.biblioteca.model.autor;
 
 import br.csi.biblioteca.model.livro.Livro;
@@ -631,7 +746,7 @@ public class Autor {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\autor\AutorRepository.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\autor\AutorRepository.java:
 package br.csi.biblioteca.model.autor;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -641,7 +756,7 @@ public interface AutorRepository extends JpaRepository<Autor, Integer> {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\emprestimo\Emprestimo.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\emprestimo\Emprestimo.java:
 package br.csi.biblioteca.model.emprestimo;
 
 import br.csi.biblioteca.model.livro.Livro;
@@ -700,7 +815,7 @@ public class Emprestimo {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\emprestimo\EmprestimoRepository.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\emprestimo\EmprestimoRepository.java:
 package br.csi.biblioteca.model.emprestimo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -716,7 +831,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Integer>
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\livro\Livro.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\livro\Livro.java:
 package br.csi.biblioteca.model.livro;
 
 import br.csi.biblioteca.model.autor.Autor;
@@ -776,7 +891,7 @@ public class Livro {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\livro\LivroRepository.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\livro\LivroRepository.java:
 package br.csi.biblioteca.model.livro;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -789,14 +904,14 @@ public interface LivroRepository extends JpaRepository<Livro, Integer> {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\DadosAutenticacao.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\DadosAutenticacao.java:
 package br.csi.biblioteca.model.usuario;
 
 public record DadosAutenticacao(String login, String senha) {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\DadosUsuario.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\DadosUsuario.java:
 package br.csi.biblioteca.model.usuario;
 
 public record DadosUsuario(int id, String email, String permissao) {
@@ -806,7 +921,7 @@ public record DadosUsuario(int id, String email, String permissao) {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\Usuario.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\Usuario.java:
 package br.csi.biblioteca.model.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -907,7 +1022,7 @@ public class Usuario implements UserDetails {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\UsuarioRepository.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\model\usuario\UsuarioRepository.java:
 package br.csi.biblioteca.model.usuario;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -923,7 +1038,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\AutenticacaoService.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\AutenticacaoService.java:
 package br.csi.biblioteca.service;
 
 import br.csi.biblioteca.model.usuario.Usuario;
@@ -952,7 +1067,7 @@ public class AutenticacaoService implements UserDetailsService {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\AutorService.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\AutorService.java:
 package br.csi.biblioteca.service;
 
 import br.csi.biblioteca.model.autor.Autor;
@@ -1003,7 +1118,7 @@ public class AutorService {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\EmprestimoService.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\EmprestimoService.java:
 package br.csi.biblioteca.service;
 
 import br.csi.biblioteca.model.autor.Autor;
@@ -1127,7 +1242,7 @@ public class EmprestimoService {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\LivroService.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\LivroService.java:
 package br.csi.biblioteca.service;
 
 import br.csi.biblioteca.controller.LivroDTO;
@@ -1226,60 +1341,7 @@ public class LivroService {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\TokenServiceJWT.java:
-package br.csi.biblioteca.service;
-
-//tem algumas infos do usuario, armazenado no cliente
-
-import br.csi.biblioteca.model.usuario.Usuario;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
-@Service
-public class TokenServiceJWT {
-    private final String KEY = "poo2";
-    public String gerarToken(Usuario user) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(KEY); //palavra para descriptografar token
-            return JWT.create()
-                    .withIssuer("API Biblioteca 3.0")
-                    .withSubject(user.getUsername())
-                    .withClaim("ROLE", user.getAuthorities().stream().toList().get(0).toString())
-                    .withExpiresAt(dataExpiracao())
-                    .sign(algorithm);
-
-        } catch (JWTCreationException e) {
-            throw new RuntimeException("Erro ao gerar token", e);
-        }
-    }
-
-    private Instant dataExpiracao() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
-    }
-
-    public String getSubject(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(KEY);
-            return JWT.require(algorithm)
-                    .withIssuer("API Biblioteca 3.0")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (JWTVerificationException e) {
-            throw new RuntimeException("Token inválido ou expirado");
-        }
-    }
-}
-.
-.
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\UsuarioService.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\UsuarioService.java:
 package br.csi.biblioteca.service;
 
 import br.csi.biblioteca.model.usuario.DadosUsuario;
@@ -1356,7 +1418,7 @@ public class UsuarioService {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\exception\RecursoNaoEncontradoException.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\exception\RecursoNaoEncontradoException.java:
 package br.csi.biblioteca.service.exception;
 
 public class RecursoNaoEncontradoException extends RuntimeException {
@@ -1366,7 +1428,7 @@ public class RecursoNaoEncontradoException extends RuntimeException {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\exception\RegraDeNegocioException.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\exception\RegraDeNegocioException.java:
 package br.csi.biblioteca.service.exception;
 
 public class RegraDeNegocioException extends RuntimeException {
@@ -1376,7 +1438,7 @@ public class RegraDeNegocioException extends RuntimeException {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\exception\TokenException.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\java\br\csi\biblioteca\service\exception\TokenException.java:
 package br.csi.biblioteca.service.exception;
 
 public class TokenException extends RuntimeException{
@@ -1386,7 +1448,7 @@ public class TokenException extends RuntimeException{
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\resources\application.properties:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\resources\application.properties:
 spring.application.name=biblioteca3.0
 
 server.servlet.context-path=/biblioteca3.0
@@ -1399,7 +1461,7 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\resources\db\migration\V1__create-tables.sql:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\resources\db\migration\V1__create-tables.sql:
 CREATE TABLE usuario (
                          id_us SERIAL NOT NULL PRIMARY KEY,
                          nome_us VARCHAR(255) NOT NULL,
@@ -1447,7 +1509,7 @@ CREATE TABLE livro_autor (
 );
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\main\resources\db\migration\V2__insert-data.sql:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\main\resources\db\migration\V2__insert-data.sql:
 -- Inserts para a tabela 'usuario'
 INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, permissao) VALUES
                                                                           ('Admin Geral', 'admin@email.com', '$2a$10$z3cizdUJbCrRJvY3WDzbpe5n1OxMG18fq7Ejwf4b/Lp7xHgO478zO', 'ADMIN', 'ROLE_ADMIN'),
@@ -1491,7 +1553,7 @@ INSERT INTO emprestimo (id_livro_emp, id_usuario_emp, data_emprestimo_emp, data_
                                                 (4, 5, '2025-09-18', '2025-10-02', 'ATIVO'); -- Daniel Farias pegou Belas Maldições
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\src\test\java\br\csi\biblioteca\BibliotecaApplicationTests.java:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\src\test\java\br\csi\biblioteca\BibliotecaApplicationTests.java:
 package br.csi.biblioteca;
 
 import org.junit.jupiter.api.Test;
@@ -1507,7 +1569,7 @@ class BibliotecaApplicationTests {
 }
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\target\classes\application.properties:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\target\classes\application.properties:
 spring.application.name=biblioteca3.0
 
 server.servlet.context-path=/biblioteca3.0
@@ -1520,7 +1582,7 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\target\classes\db\migration\V1__create-tables.sql:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\target\classes\db\migration\V1__create-tables.sql:
 CREATE TABLE usuario (
                          id_us SERIAL NOT NULL PRIMARY KEY,
                          nome_us VARCHAR(255) NOT NULL,
@@ -1568,7 +1630,7 @@ CREATE TABLE livro_autor (
 );
 .
 .
-- Endereço: C:\Users\Cliente\nicolegrazzioli\biblioteca3.0\target\classes\db\migration\V2__insert-data.sql:
+- Endereço: C:\Users\nicol\nicolegrazzioli\biblioteca3.0\target\classes\db\migration\V2__insert-data.sql:
 -- Inserts para a tabela 'usuario'
 INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, permissao) VALUES
                                                                           ('Admin Geral', 'admin@email.com', '$2a$10$z3cizdUJbCrRJvY3WDzbpe5n1OxMG18fq7Ejwf4b/Lp7xHgO478zO', 'ADMIN', 'ROLE_ADMIN'),
