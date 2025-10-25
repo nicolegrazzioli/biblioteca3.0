@@ -1,7 +1,6 @@
 package br.csi.biblioteca.service;
 
 import br.csi.biblioteca.controller.EmprestimoDTO;
-import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.model.emprestimo.Emprestimo;
 import br.csi.biblioteca.model.emprestimo.EmprestimoRepository;
 import br.csi.biblioteca.model.livro.Livro;
@@ -12,10 +11,7 @@ import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
 import br.csi.biblioteca.service.exception.RegraDeNegocioException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

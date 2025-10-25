@@ -1,10 +1,10 @@
 -- Inserts para a tabela 'usuario'
-INSERT INTO usuario (nome_us, email_us, senha_us, tipo_us, permissao) VALUES
-                                                                          ('Admin Geral', 'admin@email.com', '$2a$10$z3cizdUJbCrRJvY3WDzbpe5n1OxMG18fq7Ejwf4b/Lp7xHgO478zO', 'ADMIN', 'ROLE_ADMIN'),
-                                                                          ('Ana Silva', 'ana.silva@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe', 'USUARIO', 'ROLE_USUARIO'),
-                                                                          ('Bruno Costa', 'bruno.costa@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe', 'USUARIO', 'ROLE_USUARIO'),
-                                                                          ('Carla Dias', 'carla.dias@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe', 'USUARIO', 'ROLE_USUARIO'),
-                                                                          ('Daniel Farias', 'daniel.farias@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe', 'USUARIO', 'ROLE_USUARIO');
+INSERT INTO usuario (nome_us, email_us, senha_us, permissao) VALUES
+                                                                          ('Admin Geral', 'admin@email.com', '$2a$10$z3cizdUJbCrRJvY3WDzbpe5n1OxMG18fq7Ejwf4b/Lp7xHgO478zO', 'ROLE_ADMIN'),
+                                                                          ('Ana Silva', 'ana.silva@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe', 'ROLE_USUARIO'),
+                                                                          ('Bruno Costa', 'bruno.costa@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe',  'ROLE_USUARIO'),
+                                                                          ('Carla Dias', 'carla.dias@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe',  'ROLE_USUARIO'),
+                                                                          ('Daniel Farias', 'daniel.farias@email.com', '$2a$10$h/gkU57V5q91E5X1C7XOs.m3B3oFrBRRqAGxdfQIGYWhAREccC1Oe',  'ROLE_USUARIO');
 
 -- Inserts para a tabela 'autor'
 INSERT INTO autor (nome_aut, nacionalidade_aut, data_nascimento_aut) VALUES

@@ -68,15 +68,15 @@ public class EmprestimoController {
             @ApiResponse(responseCode = "400", description = "Erro de validação nos dados do empréstimo")
     })
     @PostMapping("/registrar")
-    /*public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
-         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO.getLivroEmp(), emprestimoDTO.getUsuarioEmp());
-        return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
-    }*/
     public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
         // Apenas passe o DTO inteiro para o service
         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
     }
+    /*public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
+         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO.getLivroEmp(), emprestimoDTO.getUsuarioEmp());
+        return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
+    }*/
 
 
     @Operation(summary = "Devolver um empréstimo por ID")

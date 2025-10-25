@@ -1,0 +1,1421 @@
+type: spec.insomnia.rest/5.0
+name: OpenAPI definition v0 2510
+meta:
+  id: wrk_29f1627972284e609f5c1351e482c4dd
+  created: 1761403191583
+  modified: 1761403206452
+  description: ""
+collection:
+  - name: Livros
+    meta:
+      id: fld_bdf1cad8d7c44f75860e769f2fe1cc65
+      created: 1761403245482
+      modified: 1761403245482
+      sortKey: -1761403245482
+      description: Operações de CRUD para Livros
+    children:
+      - url: "{{ _.base_url }}/livros/:id"
+        name: Busca um livro por ID
+        meta:
+          id: req_eab0277ec3844d84a8f4ca9505fa829e
+          created: 1761403245502
+          modified: 1761405726337
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245502
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "1"
+      - url: "{{ _.base_url }}/livros/:id"
+        name: Atualiza um livro existente por ID
+        meta:
+          id: req_1c43829ec0ad4bac946ea89f37572885
+          created: 1761403245504
+          modified: 1761405576358
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245504
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "tituloLiv": "novo",
+            	"isbnLiv": "11111111111",
+            	"autoresIds": [
+            		1
+            	]	
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "6"
+      - url: "{{ _.base_url }}/livros/:id"
+        name: Exclui (soft delete) um livro por ID
+        meta:
+          id: req_1e89c889b9074fccb1d92bdbf0a27738
+          created: 1761403245506
+          modified: 1761405678658
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245506
+        method: DELETE
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "6"
+      - url: "{{ _.base_url }}/livros/registrar"
+        name: Registra um novo livro
+        meta:
+          id: req_19264b30798049268d11d82e64ad22e5
+          created: 1761403245518
+          modified: 1761405462054
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245518
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "tituloLiv": "novo",
+              "isbnLiv": "1111111",
+              "anoPublicacaoLiv": 2020,
+              "autoresIds": [
+                4
+              ]
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/livros"
+        name: Lista todos os livros ativos
+        meta:
+          id: req_d4193c3e92224f54b53b4d4923665825
+          created: 1761403245525
+          modified: 1761405495643
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245525
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/livros/all"
+        name: Lista todos os livros (incluindo inativos)
+        meta:
+          id: req_8ee7c88c4c974595adc6d6fd2c904510
+          created: 1761403245527
+          modified: 1761405352854
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245527
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Usuários
+    meta:
+      id: fld_b295471b83ac408ebcf1bbf7159a3ad1
+      created: 1761403245484
+      modified: 1761403245484
+      sortKey: -1761403245484
+      description: Operações de CRUD para Usuários
+    children:
+      - url: "{{ _.base_url }}/usuarios/:id"
+        name: Busca um usuário por ID
+        meta:
+          id: req_3c6125da3bfb4829a7b0a65b55bcc97f
+          created: 1761403245497
+          modified: 1761405331182
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245497
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "3"
+      - url: "{{ _.base_url }}/usuarios/:id"
+        name: Atualiza um usuário existente por ID
+        meta:
+          id: req_b7987edbf6d64863bcd8c9bac5d0713e
+          created: 1761403245499
+          modified: 1761406773318
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245499
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nomeUs": "admin novo",
+            	"senhaUs": "123",
+            	"permissao": "ROLE_USUARIO"
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "2"
+      - url: "{{ _.base_url }}/usuarios/:id"
+        name: Exclui um usuário por ID
+        meta:
+          id: req_db840b227ba64a8b98d50ea6562d70af
+          created: 1761403245501
+          modified: 1761404974115
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245501
+        method: DELETE
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "3"
+      - url: "{{ _.base_url }}/usuarios/registrar"
+        name: Registra um novo usuário
+        meta:
+          id: req_21614de6eebf438ca6b8ed531b61690b
+          created: 1761403245515
+          modified: 1761405815004
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245515
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "emailUs": "teste@teste",
+              "senhaUs": "123",
+              "nomeUs": "teste",
+              "ativoUs": true,
+              "permissao": "ROLE_USUARIO"
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/usuarios"
+        name: Lista todos os usuários ativos
+        meta:
+          id: req_bad89f2e5c1e4641b3b93876ffcc46ab
+          created: 1761403245523
+          modified: 1761405102964
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245523
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Login
+    meta:
+      id: fld_186e399d058b420d818bef948b9de6b5
+      created: 1761403245492
+      modified: 1761403245492
+      sortKey: -1761403245492
+      description: Path relacionado a operações de login
+    children:
+      - url: "{{ _.base_url }}/login"
+        name: Fazer login
+        meta:
+          id: req_645925410e9246f98ed83ad6b4f7ceb1
+          created: 1761403245517
+          modified: 1761406266958
+          isPrivate: false
+          description: Default
+          sortKey: -1761403245517
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "login": "admin@email.com",
+              "senha": "admin123"
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Empréstimos
+    meta:
+      id: fld_031f01bb30b34f64aa2650922e8a8777
+      created: 1761403245493
+      modified: 1761403245493
+      sortKey: -1761403245493
+      description: Path relacionado aos empréstimos
+    children:
+      - url: "{{ _.base_url }}/emprestimos/:id/renovar"
+        name: Renovar um empréstimo por ID
+        meta:
+          id: req_93ff993f89414b91af5985b75f77f965
+          created: 1761403245507
+          modified: 1761406209255
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245507
+        method: PUT
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "4"
+      - url: "{{ _.base_url }}/emprestimos/:id/devolver"
+        name: Devolver um empréstimo por ID
+        meta:
+          id: req_48791c010cc343e99fb8edd92c7b6fbd
+          created: 1761403245509
+          modified: 1761404459462
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245509
+        method: PUT
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "1"
+      - url: "{{ _.base_url }}/emprestimos/registrar"
+        name: Criar um empréstimo
+        meta:
+          id: req_b98961bcd94b4efd85c35f4b393b6f18
+          created: 1761403245520
+          modified: 1761404403153
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245520
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "livroEmp": 4,
+              "usuarioEmp": 1
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/emprestimos"
+        name: Lista os empréstimos
+        meta:
+          id: req_8bdf0ddb68e043b189e71fe30bac8bc0
+          created: 1761403245528
+          modified: 1761405094842
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245528
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/emprestimos/:id"
+        name: Busca um empréstimo por ID
+        meta:
+          id: req_d2c9e037e72546839d491cd81859da71
+          created: 1761403245529
+          modified: 1761404597571
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245529
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "1"
+  - name: Autores
+    meta:
+      id: fld_2403bba978884baa8d092fd01d15c926
+      created: 1761403245495
+      modified: 1761403245495
+      sortKey: -1761403245495
+      description: Path relacionado aos Autores
+    children:
+      - url: "{{ _.base_url }}/autores/:id"
+        name: Busca um autor por ID
+        meta:
+          id: req_f5125d7e472f4b7bb3503b0e6a5d5c41
+          created: 1761403245510
+          modified: 1761404279309
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245510
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "1"
+      - url: "{{ _.base_url }}/autores/:id"
+        name: Atualizar um autor por ID
+        meta:
+          id: req_9407d7e55a2d426d967122009f15aff6
+          created: 1761403245512
+          modified: 1761406767849
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245512
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nomeAut": "novo nome",
+              "nacionalidadeAut": "aaaaaaa",
+              "dataNascimentoAut": "11/11/2000"
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "1"
+      - url: "{{ _.base_url }}/autores/:id"
+        name: Excluir um autor por ID
+        meta:
+          id: req_5138252c7f4d4d4a9c5a25a4d1bde5da
+          created: 1761403245513
+          modified: 1761404063821
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245513
+        method: DELETE
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+        pathParameters:
+          - name: id
+            value: "2"
+      - url: "{{ _.base_url }}/autores/registrar"
+        name: Criar um autor
+        meta:
+          id: req_658a8f8c86714d309a6108d4a25053d6
+          created: 1761403245522
+          modified: 1761406761994
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245522
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nomeAut": "nome novo",
+              "nacionalidadeAut": "brasileiro",
+              "dataNascimentoAut": "25/10/1999"
+            }
+        headers:
+          - name: Content-Type
+            disabled: false
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/autores"
+        name: Lista os autores
+        meta:
+          id: req_bc8a2ed903b149a3b3a6beb99f09fcf7
+          created: 1761403245531
+          modified: 1761403539812
+          isPrivate: false
+          description: ""
+          sortKey: -1761403245531
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: "Bearer "
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_e7ad5cb69f53975f024ce3ae6972c88427f4d390
+    created: 1761403191614
+    modified: 1761403191614
+environments:
+  name: Base Environment
+  meta:
+    id: env_e7ad5cb69f53975f024ce3ae6972c88427f4d390
+    created: 1761403191595
+    modified: 1761403245475
+    isPrivate: false
+  data:
+    base_url: "{{ _.scheme }}://{{ _.host }}{{ _.base_path }}"
+  subEnvironments:
+    - name: OpenAPI env localhost:8080
+      meta:
+        id: env_a9c00bf0feaf45a799377a0b5694ba09
+        created: 1761403245479
+        modified: 1761406275968
+        isPrivate: false
+        sortKey: 1761403245479
+      data:
+        scheme: http
+        base_path: /biblioteca3.0
+        host: localhost:8080
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgQmlibGlvdGVjYSAzLjAiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJST0xFIjpbIlJPTEVfQURNSU4iXSwiZXhwIjoxNzYxNDEzNDY3fQ.8BkJg1SHAgKEaFK6EJUn2HXfi9fwzIL_14fSq4bN_Fc
+spec:
+  contents:
+    openapi: 3.0.1
+    info:
+      title: OpenAPI definition
+      version: v0
+    servers:
+      - url: http://localhost:8080/biblioteca3.0
+        description: Generated server url
+    tags:
+      - name: Livros
+        description: Operações de CRUD para Livros
+      - name: Usuários
+        description: Operações de CRUD para Usuários
+      - name: Login
+        description: Path relacionado a operações de login
+      - name: Empréstimos
+        description: Path relacionado aos empréstimos
+      - name: Autores
+        description: Path relacionado aos Autores
+    paths:
+      /usuarios/{id}:
+        get:
+          tags:
+            - Usuários
+          summary: Busca um usuário por ID
+          operationId: buscarPorId
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "200":
+              description: Usuário encontrado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/DadosUsuario"
+            "404":
+              description: Usuário não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/DadosUsuario"
+        put:
+          tags:
+            - Usuários
+          summary: Atualiza um usuário existente por ID
+          operationId: atualizar
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Usuario"
+            required: true
+          responses:
+            "200":
+              description: Usuário atualizado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/DadosUsuario"
+            "400":
+              description: Erro de validação
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/DadosUsuario"
+            "404":
+              description: Usuário não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/DadosUsuario"
+        delete:
+          tags:
+            - Usuários
+          summary: Exclui um usuário por ID
+          operationId: excluir
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "204":
+              description: Usuário excluído com sucesso
+            "400":
+              description: "Não foi possível excluir (ex: usuário possui empréstimos)"
+            "404":
+              description: Usuário não encontrado
+      /livros/{id}:
+        get:
+          tags:
+            - Livros
+          summary: Busca um livro por ID
+          operationId: getLivroById
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "200":
+              description: Livro encontrado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Livro"
+            "404":
+              description: Livro não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Livro"
+        put:
+          tags:
+            - Livros
+          summary: Atualiza um livro existente por ID
+          operationId: atualizar_1
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LivroDTO"
+            required: true
+          responses:
+            "200":
+              description: Livro atualizado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Livro"
+            "400":
+              description: "Erro de validação (ex: sem autor)"
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Livro"
+            "404":
+              description: Livro não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Livro"
+        delete:
+          tags:
+            - Livros
+          summary: Exclui (soft delete) um livro por ID
+          operationId: excluir_1
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "204":
+              description: Livro excluído (inativado) com sucesso
+            "400":
+              description: "Não foi possível excluir (ex: livro está emprestado)"
+            "404":
+              description: Livro não encontrado
+      /emprestimos/{id}/renovar:
+        put:
+          tags:
+            - Empréstimos
+          summary: Renovar um empréstimo por ID
+          operationId: renovar
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "200":
+              description: Empréstimo atualizado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+            "404":
+              description: Empréstimo não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+      /emprestimos/{id}/devolver:
+        put:
+          tags:
+            - Empréstimos
+          summary: Devolver um empréstimo por ID
+          operationId: devolver
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "200":
+              description: Empréstimo devolvido com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+            "400":
+              description: O empréstimo não pode ser devolvido
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+            "404":
+              description: Empréstimo não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+      /autores/{id}:
+        get:
+          tags:
+            - Autores
+          summary: Busca um autor por ID
+          operationId: buscarPorId_2
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "200":
+              description: Autor encontrado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Autor"
+            "404":
+              description: Autor não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Autor"
+        put:
+          tags:
+            - Autores
+          summary: Atualizar um autor por ID
+          operationId: atualizar_2
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Autor"
+            required: true
+          responses:
+            "200":
+              description: Autor atualizado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Autor"
+            "400":
+              description: Erro de validação nos dados do autor
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Autor"
+            "404":
+              description: Autor não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Autor"
+        delete:
+          tags:
+            - Autores
+          summary: Excluir um autor por ID
+          operationId: excluir_2
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "204":
+              description: Autor excluído com sucesso
+            "400":
+              description: O autor não pode ser excluído
+      /usuarios/registrar:
+        post:
+          tags:
+            - Usuários
+          summary: Registra um novo usuário
+          operationId: salvar
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Usuario"
+            required: true
+          responses:
+            "201":
+              description: Usuário criado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/DadosUsuario"
+            "400":
+              description: "Erro de validação (ex: email inválido ou nome em branco)"
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/DadosUsuario"
+      /login:
+        post:
+          tags:
+            - Login
+          summary: Fazer login
+          description: Default
+          operationId: login
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/DadosAutenticacao"
+            required: true
+          responses:
+            "200":
+              description: Login bem sucedido
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/DadosToken"
+            "401":
+              description: Usuário ou senha incorretos
+              content:
+                "*/*":
+                  schema:
+                    type: object
+            "500":
+              description: Erro interno de processamento do login
+              content:
+                "*/*":
+                  schema:
+                    type: object
+      /livros/registrar:
+        post:
+          tags:
+            - Livros
+          summary: Registra um novo livro
+          operationId: salvar_1
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/LivroDTO"
+            required: true
+          responses:
+            "201":
+              description: Livro criado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Livro"
+            "400":
+              description: "Erro de validação (ex: sem autor ou título em branco)"
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Livro"
+      /emprestimos/registrar:
+        post:
+          tags:
+            - Empréstimos
+          summary: Criar um empréstimo
+          operationId: salvar_2
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/EmprestimoDTO"
+            required: true
+          responses:
+            "201":
+              description: Empréstimo criado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+            "400":
+              description: Erro de validação nos dados do empréstimo
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+      /autores/registrar:
+        post:
+          tags:
+            - Autores
+          summary: Criar um autor
+          operationId: salvar_3
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Autor"
+            required: true
+          responses:
+            "201":
+              description: Autor criado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Autor"
+            "400":
+              description: Erro de validação nos dados do autor
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Autor"
+      /usuarios:
+        get:
+          tags:
+            - Usuários
+          summary: Lista todos os usuários ativos
+          operationId: listar
+          responses:
+            "200":
+              description: Usuários ativos encontrados com sucesso
+              content:
+                "*/*":
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DadosUsuario"
+      /livros:
+        get:
+          tags:
+            - Livros
+          summary: Lista todos os livros ativos
+          operationId: listarAtivos
+          responses:
+            "200":
+              description: Livros ativos encontrados com sucesso
+              content:
+                "*/*":
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Livro"
+      /livros/all:
+        get:
+          tags:
+            - Livros
+          summary: Lista todos os livros (incluindo inativos)
+          operationId: listarAll
+          responses:
+            "200":
+              description: Todos os livros encontrados com sucesso
+              content:
+                "*/*":
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Livro"
+      /emprestimos:
+        get:
+          tags:
+            - Empréstimos
+          summary: Lista os empréstimos
+          operationId: listar_1
+          responses:
+            "200":
+              description: Empréstimos encontrados com sucesso
+              content:
+                "*/*":
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Emprestimo"
+      /emprestimos/{id}:
+        get:
+          tags:
+            - Empréstimos
+          summary: Busca um empréstimo por ID
+          operationId: buscarPorId_1
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int32
+          responses:
+            "200":
+              description: Empréstimo encontrado com sucesso
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+            "404":
+              description: Empréstimo não encontrado
+              content:
+                "*/*":
+                  schema:
+                    $ref: "#/components/schemas/Emprestimo"
+      /autores:
+        get:
+          tags:
+            - Autores
+          summary: Lista os autores
+          operationId: listar_2
+          responses:
+            "200":
+              description: Autores encontrados com sucesso
+              content:
+                "*/*":
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Autor"
+    components:
+      schemas:
+        GrantedAuthority:
+          type: object
+          properties:
+            authority:
+              type: string
+        Usuario:
+          required:
+            - ativoUs
+            - nomeUs
+            - permissao
+            - senhaUs
+          type: object
+          properties:
+            idUs:
+              type: integer
+              description: ID único do usuário
+              format: int32
+              example: 1
+            emailUs:
+              type: string
+            senhaUs:
+              type: string
+            nomeUs:
+              type: string
+            ativoUs:
+              type: boolean
+            permissao:
+              type: string
+            password:
+              type: string
+            enabled:
+              type: boolean
+            authorities:
+              type: array
+              items:
+                $ref: "#/components/schemas/GrantedAuthority"
+            username:
+              type: string
+            accountNonLocked:
+              type: boolean
+            credentialsNonExpired:
+              type: boolean
+            accountNonExpired:
+              type: boolean
+        DadosUsuario:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+            email:
+              type: string
+            permissao:
+              type: string
+        LivroDTO:
+          required:
+            - anoPublicacaoLiv
+            - autoresIds
+            - isbnLiv
+            - tituloLiv
+          type: object
+          properties:
+            idLiv:
+              type: integer
+              format: int32
+            tituloLiv:
+              type: string
+            isbnLiv:
+              type: string
+            anoPublicacaoLiv:
+              type: integer
+              format: int32
+            autoresIds:
+              uniqueItems: true
+              type: array
+              items:
+                type: integer
+                format: int32
+        Autor:
+          required:
+            - nomeAut
+          type: object
+          properties:
+            idAut:
+              type: integer
+              format: int32
+            nomeAut:
+              type: string
+            nacionalidadeAut:
+              type: string
+            dataNascimentoAut:
+              type: string
+              format: date
+        Livro:
+          required:
+            - tituloLiv
+          type: object
+          properties:
+            idLiv:
+              type: integer
+              format: int32
+            tituloLiv:
+              type: string
+            isbnLiv:
+              type: string
+            anoPublicacaoLiv:
+              type: integer
+              format: int32
+            disponivelLiv:
+              type: boolean
+            ativoLiv:
+              type: boolean
+            autores:
+              uniqueItems: true
+              type: array
+              items:
+                $ref: "#/components/schemas/Autor"
+        Emprestimo:
+          required:
+            - dataDevolucaoPrevistaEmp
+            - dataEmprestimoEmp
+            - statusEmp
+          type: object
+          properties:
+            idEmp:
+              type: integer
+              format: int32
+            livroEmp:
+              $ref: "#/components/schemas/Livro"
+            usuarioEmp:
+              $ref: "#/components/schemas/Usuario"
+            dataEmprestimoEmp:
+              type: string
+              format: date
+            dataDevolucaoPrevistaEmp:
+              type: string
+              format: date
+            dataDevolucaoEfetivaEmp:
+              type: string
+              format: date
+            statusEmp:
+              type: string
+        DadosAutenticacao:
+          type: object
+          properties:
+            login:
+              type: string
+            senha:
+              type: string
+        DadosToken:
+          type: object
+          properties:
+            token:
+              type: string
+        EmprestimoDTO:
+          required:
+            - livroEmp
+            - usuarioEmp
+          type: object
+          properties:
+            livroEmp:
+              type: integer
+              format: int32
+            usuarioEmp:
+              type: integer
+              format: int32
+  meta:
+    id: spc_805c87b2e8184e4ba68c896e3019e643
+    created: 1761403191588
+    modified: 1761403206449

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/login")
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AutenticacaoController {
     private final AuthenticationManager manager;
     private final TokenServiceJWT tokenService;
+    private static final Logger logger = LoggerFactory.getLogger(AutenticacaoController.class);
 
     @Operation(summary = "Fazer login", description = "Default") //descrição do endpoint
     @ApiResponses(value = { //respostas possiveis que o endpoint pode retornar + descrição
@@ -52,7 +55,8 @@ public class AutenticacaoController {
             //usuario ou senha invalidos = 401
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou senha incorretos");
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            logger.error("Erro interno ao processar login: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno de processamento do login"); //500
         }
 

@@ -51,9 +51,9 @@ public class Usuario implements UserDetails {
     @Column(name = "ativo_us")
     private boolean ativoUs;
 
-    @NotNull
+    /*@NotNull
     @Column(name = "tipo_us", nullable = false)
-    private String tipoUs;
+    private String tipoUs;*/
 
     @NotNull
     @Column(name = "permissao")

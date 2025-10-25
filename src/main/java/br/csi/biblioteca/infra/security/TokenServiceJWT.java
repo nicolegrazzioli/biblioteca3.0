@@ -7,6 +7,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,14 +17,16 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenServiceJWT {
-    private final String KEY = "poo2";
+    //private final String KEY = "poo2";
+    @Value("${jwt.secret}")
+    private String KEY;
     public String gerarToken(Usuario user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(KEY); //palavra para descriptografar token
             return JWT.create()
                     .withIssuer("API Biblioteca 3.0")
                     .withSubject(user.getUsername())
-                    .withClaim("ROLE", user.getAuthorities().stream().toList().get(0).toString())
+                    .withClaim("ROLE", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                     .withExpiresAt(dataExpiracao())
                     .sign(algorithm);
 

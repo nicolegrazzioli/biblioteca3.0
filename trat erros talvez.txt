@@ -1,6 +1,3 @@
-script para explicação
-belezaaaa agora pode me ajudar a montar um roteiro para apresentar o trabalho? um video de ate 5 minutos dando uma geral nos codigos (estrutura na verdade, pq nao tem como explicar tudo, tipo so o que é cada aquivo, pasta e uma geral mesmo em um codigo de cada tipo. ex: mostrar e explicar apenas 1 controller, apenas 1 service e etc), alem de toda a parte de segurança (como foi implementado, o que é e faz cada parte e cada coisa), autorização, a parte de token, os model, a parte de exceções e tratamento de erros, apresentar o banco de dados (diagrama, configuração/ligação da base vazia no pgadmin4 com os codigos no intellij) e o principal: mostrar funcionando - o swagger, o banco populado e pelo menos uma requisição de cada tipo no insomnia (mostrar importando e configurando a coleção, fazer login, pegar o token, configurar e testar um exemplo de cada) e o que mais voce julgar relevante. linguagem tecnica mas nao precisa ser formal
-
 
 package br.csi.avaliador_de_projetos.controller;
 

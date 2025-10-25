@@ -6,14 +6,10 @@ import br.csi.biblioteca.model.usuario.UsuarioRepository;
 import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
 import br.csi.biblioteca.service.exception.RegraDeNegocioException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class UsuarioService {
@@ -35,7 +31,7 @@ public class UsuarioService {
 
     //crud
     public Usuario salvar(Usuario usuario){
-        usuario.setTipoUs("USUARIO");
+        //usuario.setTipoUs("USUARIO");
         usuario.setSenhaUs(new BCryptPasswordEncoder().encode(usuario.getSenhaUs()));
         usuario.setAtivoUs(true);
         usuario.setPermissao("ROLE_USUARIO");

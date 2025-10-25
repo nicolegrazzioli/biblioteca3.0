@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses; 
 import io.swagger.v3.oas.annotations.tags.Tag; 
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,6 +35,13 @@ public class UsuarioController {
         URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuarioSalvo.getIdUs()).toUri(); 
         return ResponseEntity.created(uri).body(dadosUsuario);   
     }
+    /*{
+  "emailUs": "teste@teste",
+  "senhaUs": "123",
+  "nomeUs": "teste",
+  "ativoUs": true,
+  "permissao": "ROLE_USUARIO"
+}*/
 
     @Operation(summary = "Atualiza um usuário existente por ID")
     @ApiResponses(value = {
