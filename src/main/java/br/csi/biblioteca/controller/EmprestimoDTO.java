@@ -1,5 +1,6 @@
 package br.csi.biblioteca.controller;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,8 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmprestimoDTO {
-    @NotEmpty
+    @NotNull
     private Integer livroEmp; //idLivro
-    @NotEmpty
+    @NotNull
     private Integer usuarioEmp; //idUsuario
 }

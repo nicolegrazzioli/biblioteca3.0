@@ -1,5 +1,6 @@
 package br.csi.biblioteca.service;
 
+import br.csi.biblioteca.controller.EmprestimoDTO;
 import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.model.emprestimo.Emprestimo;
 import br.csi.biblioteca.model.emprestimo.EmprestimoRepository;
@@ -39,7 +40,7 @@ public class EmprestimoService {
     }
 
     //consulta
-    public List<Emprestimo> listar(Integer idUsuarioLogado) {
+    /*public List<Emprestimo> listar(Integer idUsuarioLogado) {
         Usuario uLogado = usuarioRepository.findById(idUsuarioLogado).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
         if ("ADMIN".equals(uLogado.getTipoUs())) {
             //se for ADMIN, ve todos emprestimos de todos os usuarios
@@ -48,7 +49,19 @@ public class EmprestimoService {
             //se for USUARIO, ve so os seus emprestimos
             return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuarioLogado);
         }
+    }*/
+    public List<Emprestimo> listar(Usuario uLogado) {
+        // Checa a permissão real do Spring Security, não um campo de string
+        boolean isAdmin = uLogado.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return this.emprestimoRepository.findAll();
+        } else {
+            return this.emprestimoRepository.findByUsuarioEmp_IdUs(uLogado.getIdUs());
+        }
     }
+
 
 //    public List<Emprestimo> listarPorUsuario(Integer idUsuario) {
 //        return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuario);
@@ -60,7 +73,8 @@ public class EmprestimoService {
 
     //criar e devolver
     @Transactional //todas operações no banco são feitas em 1 transação
-    public Emprestimo criarEmprestimo(Integer idLivro, Integer idUsuario) {
+    //criarEmprestimo antigo
+    /*public Emprestimo criarEmprestimo(Integer idLivro, Integer idUsuario) {
         Livro l = this.livroRepository.findById(idLivro).orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
         Usuario u = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
 
@@ -76,6 +90,38 @@ public class EmprestimoService {
         this.livroRepository.save(l); //salva alteração
 
         //novo emprestimo
+        Emprestimo e = new Emprestimo();
+        e.setLivroEmp(l);
+        e.setUsuarioEmp(u);
+        e.setDataEmprestimoEmp(LocalDate.now());
+        e.setDataDevolucaoPrevistaEmp(LocalDate.now().plusDays(14));
+        e.setStatusEmp("ATIVO");
+
+        return this.emprestimoRepository.save(e);
+    }*/
+    public Emprestimo criarEmprestimo(EmprestimoDTO dto) {
+        // 1. Buscar as entidades usando os IDs do DTO e os REPOSITÓRIOS
+        Livro l = this.livroRepository.findById(dto.getLivroEmp())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
+
+        Usuario u = this.usuarioRepository.findById(dto.getUsuarioEmp())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
+
+        // 2. Aplicar a sua regra de negócio original
+        if (!l.isAtivoLiv()) {
+            throw new RegraDeNegocioException("O livro não está disponível: está inativo");
+        }
+        if (!l.isDisponivelLiv()) {
+            throw new RegraDeNegocioException("O livro não está disponível: está emprestado");
+        }
+
+        // 3. Atualizar o livro
+        l.setDisponivelLiv(false);
+        // Não é estritamente necessário salvar o 'l' aqui por causa do @Transactional,
+        // mas é uma boa prática ser explícito.
+        this.livroRepository.save(l);
+
+        // 4. Criar o novo emprestimo
         Emprestimo e = new Emprestimo();
         e.setLivroEmp(l);
         e.setUsuarioEmp(u);

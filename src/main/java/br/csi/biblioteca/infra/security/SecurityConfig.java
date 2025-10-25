@@ -1,6 +1,5 @@
 package br.csi.biblioteca.infra.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,11 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final FiltroToken filtroToken;
-
     private final AutenticacaoFilter autenticacaoFilter;
-    public SecurityConfig(FiltroToken filtroToken, AutenticacaoFilter autenticacaoFilter) {
-        this.filtroToken = filtroToken;
+    public SecurityConfig(AutenticacaoFilter autenticacaoFilter) {
         this.autenticacaoFilter = autenticacaoFilter;
     }
 
@@ -43,13 +39,13 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                         //deletes - admin
-                        .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE).hasAuthority("ROLE_ADMIN")
 
                         //post e put em autores e livros - admin
 //                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasAuthority("ROLE_ADMIN")
 //                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USUARIO")
 
                         //outras requisiçoes - usuario autenticado
                         .anyRequest().authenticated()

@@ -3,80 +3,79 @@ package br.csi.biblioteca.controller;
 import br.csi.biblioteca.model.usuario.DadosUsuario;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation; 
+import io.swagger.v3.oas.annotations.responses.ApiResponse; 
+import io.swagger.v3.oas.annotations.responses.ApiResponses; 
+import io.swagger.v3.oas.annotations.tags.Tag; 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
-//ok
-/** status
- * POST = 201 CREATED
- * DELETE = 204 NO CONTENT
- * GET & PUT = 200 OK
- */
 
-@RestController //retorna dados no http
+@RestController
 @RequestMapping("/usuarios")
+@Tag(name = "Usuários", description = "Operações de CRUD para Usuários") 
 public class UsuarioController {
     private UsuarioService service;
     public UsuarioController(UsuarioService service) {
-        this.service = service;
+        this.service = service; 
     }
 
-
-    //criar ususario
+    @Operation(summary = "Registra um novo usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro de validação (ex: email inválido ou nome em branco)")
+    })
     @PostMapping("/registrar")
-//    public void salvar(@RequestBody Usuario usuario) { this.service.salvar(usuario); }
-                                            //pega o json e transforma em um objeto Usuario
-    public ResponseEntity<DadosUsuario> salvar(@Valid @RequestBody Usuario usuario, UriComponentsBuilder uriBuilder){ //retorna resposta http completa, com objeto Usuario
-//        Usuario u = service.salvar(usuario);
-            //cod 201 (criado)         objeto u na resposta (resultado)
-//        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(usuario));
-
-        Usuario usuarioSalvo = service.salvar(usuario);
-        DadosUsuario dadosUsuario = new DadosUsuario(usuarioSalvo);
-        URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuario.getIdUs()).toUri();
-        return ResponseEntity.created(uri).body(dadosUsuario);
-        /*{
-            "emailUs": "aut@aut",
-            "senhaUs": "aut",
-            "nomeUs": "aut",
-            "ativoUs": "true",
-            "tipoUs": "USUARIO",
-            "permissao": "role_usuario"
-        }*/
+    public ResponseEntity<DadosUsuario> salvar(@Valid @RequestBody Usuario usuario, UriComponentsBuilder uriBuilder){ 
+        Usuario usuarioSalvo = service.salvar(usuario);   
+        DadosUsuario dadosUsuario = new DadosUsuario(usuarioSalvo);   
+        URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuarioSalvo.getIdUs()).toUri(); 
+        return ResponseEntity.created(uri).body(dadosUsuario);   
     }
 
-
-    //admin atualizae um usuario
+    @Operation(summary = "Atualiza um usuário existente por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro de validação"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     @PutMapping("/{id}")
-    public ResponseEntity<DadosUsuario> atualizar(@PathVariable Integer id, @Valid @RequestBody Usuario usuario){
+    public ResponseEntity<DadosUsuario> atualizar(@PathVariable Integer id, @Valid @RequestBody Usuario usuario){   
         usuario.setIdUs(id);
-        Usuario usuarioAtualizado = service.atualizar(usuario);
-        return ResponseEntity.ok(new DadosUsuario(usuarioAtualizado));
+        Usuario usuarioAtualizado = service.atualizar(usuario);   
+        return ResponseEntity.ok(new DadosUsuario(usuarioAtualizado));   
     }
 
-
-    //admin excluir usuario
+    @Operation(summary = "Exclui um usuário por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Não foi possível excluir (ex: usuário possui empréstimos)"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer id){
+    public ResponseEntity<Void> excluir(@PathVariable Integer id){   
         service.excluir(id);
-        return ResponseEntity.noContent().build(); //status 204 - exclusão bem sucedida
+        return ResponseEntity.noContent().build(); //status 204   
     }
 
-
-    //admin listar usuarios ativos
+    @Operation(summary = "Lista todos os usuários ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuários ativos encontrados com sucesso")
+    })
     @GetMapping
     public ResponseEntity<List<DadosUsuario>> listar() {
-//        List<Usuario> usuarios = service.listarAtivos();
         return ResponseEntity.ok(service.listarAtivos()); //ResponseEntity.status(HttpStatus.OK) = 200
     }
 
-
-    //admin buscar usuario por id
+    @Operation(summary = "Busca um usuário por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<DadosUsuario> buscarPorId(@PathVariable Integer id){
         Usuario u = service.getUsuarioById(id);

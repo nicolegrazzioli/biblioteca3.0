@@ -3,11 +3,14 @@ package br.csi.biblioteca.controller;
 import br.csi.biblioteca.model.emprestimo.Emprestimo;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.EmprestimoService;
-import br.csi.biblioteca.service.LivroService;
-import br.csi.biblioteca.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,56 +23,82 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/emprestimos")
+@Tag(name = "Empréstimos", description = "Path relacionado aos empréstimos")
 public class EmprestimoController {
     private EmprestimoService emprestimoService;
-    private LivroService livroService;
-    private UsuarioService usuarioService;
-    public EmprestimoController(EmprestimoService emprestimoService, LivroService livroService, UsuarioService usuarioService) {
+    public EmprestimoController(EmprestimoService emprestimoService) {
         this.emprestimoService = emprestimoService;
-        this.livroService = livroService;
-        this.usuarioService = usuarioService;
     }
 
+    
     /* simula o tipo de usuario pela url, ja que nao tem login explicito
     * ex: http://localhost:8080/biblioteca3.0/emprestimos?idUsuario=1 (admin)
     * ex: http://localhost:8080/biblioteca3.0/emprestimos?idUsuario=2 (usuario)
      */
+    @Operation(summary = "Lista os empréstimos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Empréstimos encontrados com sucesso")
+    })
     @GetMapping
-    public ResponseEntity<List<Emprestimo>> listar(@RequestParam Integer idUsuario) {
+    public ResponseEntity<List<Emprestimo>> listar(Authentication authentication) {
+        Usuario uLogado = (Usuario) authentication.getPrincipal();
+        return ResponseEntity.ok(emprestimoService.listar(uLogado));
+    }
+    /*public ResponseEntity<List<Emprestimo>> listar(@RequestParam Integer idUsuario) {
 //        List<Emprestimo> emprestimos =  emprestimoService.listar(idUsuario);
         return ResponseEntity.ok(emprestimoService.listar(idUsuario)); //200
-    }
+    }*/
 
+
+    @Operation(summary = "Busca um empréstimo por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Empréstimo encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Emprestimo> buscarPorId(@PathVariable Integer id) {
 //        Emprestimo emprestimo = emprestimoService.buscarPorId(id);
         return ResponseEntity.ok(emprestimoService.buscarPorId(id)); //200
     }
 
-    /*
-    RequestBody - pega o conteudo (json) e coloca numa variavel
-     */
+    /*RequestBody - pega o conteudo (json) e coloca numa variavel*/
+    @Operation(summary = "Criar um empréstimo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Empréstimo criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro de validação nos dados do empréstimo")
+    })
     @PostMapping("/registrar")
+    /*public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
+         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO.getLivroEmp(), emprestimoDTO.getUsuarioEmp());
+        return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
+    }*/
     public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
-        Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO.getLivroEmp(), emprestimoDTO.getUsuarioEmp());
+        // Apenas passe o DTO inteiro para o service
+        Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
     }
 
 
+    @Operation(summary = "Devolver um empréstimo por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Empréstimo devolvido com sucesso"),
+            @ApiResponse(responseCode = "400", description = "O empréstimo não pode ser devolvido"),
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+    })
     @PutMapping("{id}/devolver")
     public ResponseEntity<Emprestimo> devolver(@PathVariable Integer id) {
         return ResponseEntity.ok(emprestimoService.devolver(id));
     }
 
 
+    @Operation(summary = "Renovar um empréstimo por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Empréstimo atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+    })
     @PutMapping("{id}/renovar")
     public ResponseEntity<Emprestimo> renovar(@PathVariable Integer id) {
         return ResponseEntity.ok(emprestimoService.renovar(id));
     }
-
-
-
-
-
 
 }

@@ -29,7 +29,7 @@ public class AutorController {
     }
 
 
-    @Operation(summary = "Busca os autores")
+    @Operation(summary = "Lista os autores")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autores encontrados com sucesso")
     })
@@ -43,7 +43,6 @@ public class AutorController {
     @Operation(summary = "Busca um autor por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autor encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Autor não encontrado"),
             @ApiResponse(responseCode = "404", description = "Autor não encontrado")
     })
     @GetMapping("/{id}")

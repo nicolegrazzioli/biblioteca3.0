@@ -47,7 +47,7 @@ public class Livro {
 //    @NonNull
 //    private int id_autor_liv;
     // mapeia relacionamento com autor
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "livro_autor",
             joinColumns = @JoinColumn(name = "id_livro"),
