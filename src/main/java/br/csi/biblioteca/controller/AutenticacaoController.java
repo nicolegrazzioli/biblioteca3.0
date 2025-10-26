@@ -60,19 +60,6 @@ public class AutenticacaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno de processamento do login"); //500
         }
 
-//        try {
-//            Authentication autenticado = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
-//            //regitra no manager
-//            Authentication at = manager.authenticate(autenticado);
-//
-//            User user = (User) at.getPrincipal();
-//            String token = tokenService.gerarToken(user);
-//
-//            return ResponseEntity.ok().body(token);
-//
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
     }
 
     private record DadosAutenticacao(String login, String senha) {}

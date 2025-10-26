@@ -22,14 +22,17 @@
 > - [x] Tratamento de retornos
 > - [x] Tratamento de erros
 
-- [ ] Coleção de endpoits para teste feitas no insomia ou postman (1)
+- [x] Coleção de endpoits para teste feitas no insomia ou postman (1)
 
 - [x] Spring Security
 > - [x] Autenticação: criar usuário (/login), validar token no https://www.jwt.io/
 > - [x] Autorização: se pode acessar cada endpoint
 
+----------------
 
 # Biblioteca 3.0
+> vídeo (com email da ufsm): https://drive.google.com/file/d/1MufJugAsEPBIGESd1ao-9hg8gjev9Uv7/view?usp=sharing 
+
 Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários, autores, livros e empréstimos: autenticação, cadastro, controle de acervo
 - Spring Boot - framework
 - Spring Data JPA - persistência de dados, mapeamento objeto-relacional com Hibernate
@@ -45,7 +48,7 @@ Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários,
 
 
 ### Banco de dados
-![diagrama.jpg](diagrama.jpg)
+![diagrama atualizado.png](diagrama atualizado.png)
 **Tabelas**
 - usuario (tipo) - admin, usuario
 - usuario (permissao) - role_admin, role_usuario
@@ -179,6 +182,3 @@ PUT /autores/{id}
 POST /livros/registrar
 PUT /livros/{id}
 ```
-
-insomnia
-![img.png](img.png)

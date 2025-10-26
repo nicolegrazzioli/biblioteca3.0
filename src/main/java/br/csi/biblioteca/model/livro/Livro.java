@@ -44,7 +44,6 @@ public class Livro {
     @Column(name = "ativo_liv", nullable = false)
     private boolean ativoLiv;
 
-//    @NonNull
 //    private int id_autor_liv;
     // mapeia relacionamento com autor
     @ManyToMany(fetch = FetchType.LAZY)

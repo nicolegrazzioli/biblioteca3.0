@@ -44,10 +44,6 @@ public class EmprestimoController {
         Usuario uLogado = (Usuario) authentication.getPrincipal();
         return ResponseEntity.ok(emprestimoService.listar(uLogado));
     }
-    /*public ResponseEntity<List<Emprestimo>> listar(@RequestParam Integer idUsuario) {
-//        List<Emprestimo> emprestimos =  emprestimoService.listar(idUsuario);
-        return ResponseEntity.ok(emprestimoService.listar(idUsuario)); //200
-    }*/
 
 
     @Operation(summary = "Busca um empréstimo por ID")
@@ -73,10 +69,6 @@ public class EmprestimoController {
         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
     }
-    /*public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
-         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO.getLivroEmp(), emprestimoDTO.getUsuarioEmp());
-        return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
-    }*/
 
 
     @Operation(summary = "Devolver um empréstimo por ID")

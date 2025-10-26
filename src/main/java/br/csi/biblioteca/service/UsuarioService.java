@@ -18,17 +18,6 @@ public class UsuarioService {
         this.repository = repository;
     }
 
-    //autenticar - nao usada
-    /*public Usuario autenticar(String email, String senha){
-        Usuario u = this.repository.findByEmailUs(email).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        if (u.getSenhaUs().equals(senha)){
-            return u;
-        } else {
-            throw new RuntimeException("Senha incorreta");
-        }
-    }*/
-
     //crud
     public Usuario salvar(Usuario usuario){
         //usuario.setTipoUs("USUARIO");

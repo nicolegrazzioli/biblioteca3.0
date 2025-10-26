@@ -36,16 +36,6 @@ public class EmprestimoService {
     }
 
     //consulta
-    /*public List<Emprestimo> listar(Integer idUsuarioLogado) {
-        Usuario uLogado = usuarioRepository.findById(idUsuarioLogado).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
-        if ("ADMIN".equals(uLogado.getTipoUs())) {
-            //se for ADMIN, ve todos emprestimos de todos os usuarios
-            return this.emprestimoRepository.findAll();
-        } else {
-            //se for USUARIO, ve so os seus emprestimos
-            return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuarioLogado);
-        }
-    }*/
     public List<Emprestimo> listar(Usuario uLogado) {
         // Checa a permissão real do Spring Security, não um campo de string
         boolean isAdmin = uLogado.getAuthorities().stream()
@@ -59,42 +49,12 @@ public class EmprestimoService {
     }
 
 
-//    public List<Emprestimo> listarPorUsuario(Integer idUsuario) {
-//        return this.emprestimoRepository.findByUsuarioEmp_IdUs(idUsuario);
-//    }
-
     public Emprestimo buscarPorId(Integer id) {
         return this.emprestimoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Empréstimo não encontrado"));
     }
 
     //criar e devolver
     @Transactional //todas operações no banco são feitas em 1 transação
-    //criarEmprestimo antigo
-    /*public Emprestimo criarEmprestimo(Integer idLivro, Integer idUsuario) {
-        Livro l = this.livroRepository.findById(idLivro).orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
-        Usuario u = this.usuarioRepository.findById(idUsuario).orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
-
-        //regra de negocio
-        if (!l.isAtivoLiv()) {
-            throw new RegraDeNegocioException("O livro não está disponível: está inativo");
-        }
-        if (!l.isDisponivelLiv()) {
-            throw new RegraDeNegocioException("O livro não está disponível: está emprestado");
-        }
-
-        l.setDisponivelLiv(false);
-        this.livroRepository.save(l); //salva alteração
-
-        //novo emprestimo
-        Emprestimo e = new Emprestimo();
-        e.setLivroEmp(l);
-        e.setUsuarioEmp(u);
-        e.setDataEmprestimoEmp(LocalDate.now());
-        e.setDataDevolucaoPrevistaEmp(LocalDate.now().plusDays(14));
-        e.setStatusEmp("ATIVO");
-
-        return this.emprestimoRepository.save(e);
-    }*/
     public Emprestimo criarEmprestimo(EmprestimoDTO dto) {
         // 1. Buscar as entidades usando os IDs do DTO e os REPOSITÓRIOS
         Livro l = this.livroRepository.findById(dto.getLivroEmp())
