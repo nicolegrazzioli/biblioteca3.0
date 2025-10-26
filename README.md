@@ -31,7 +31,7 @@
 ----------------
 
 # Biblioteca 3.0
-> vídeo (com email da ufsm): https://drive.google.com/file/d/1MufJugAsEPBIGESd1ao-9hg8gjev9Uv7/view?usp=sharing 
+> vídeo: https://youtu.be/iFOp8sziKdM
 
 Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários, autores, livros e empréstimos: autenticação, cadastro, controle de acervo
 - Spring Boot - framework
