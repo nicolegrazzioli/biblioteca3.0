@@ -4,6 +4,9 @@ import br.csi.biblioteca.model.emprestimo.Emprestimo;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.EmprestimoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,7 +52,11 @@ public class EmprestimoController {
     @Operation(summary = "Busca um empréstimo por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Empréstimo encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) })
     })
     @GetMapping("/{id}")
     public ResponseEntity<Emprestimo> buscarPorId(@PathVariable Integer id) {
@@ -75,7 +82,11 @@ public class EmprestimoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Empréstimo devolvido com sucesso"),
             @ApiResponse(responseCode = "400", description = "O empréstimo não pode ser devolvido"),
-            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) })
     })
     @PutMapping("{id}/devolver")
     public ResponseEntity<Emprestimo> devolver(@PathVariable Integer id) {
@@ -86,7 +97,11 @@ public class EmprestimoController {
     @Operation(summary = "Renovar um empréstimo por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Empréstimo atualizado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) })
     })
     @PutMapping("{id}/renovar")
     public ResponseEntity<Emprestimo> renovar(@PathVariable Integer id) {

@@ -3,6 +3,9 @@ package br.csi.biblioteca.controller;
 import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.service.AutorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +46,11 @@ public class AutorController {
     @Operation(summary = "Busca um autor por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autor encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Autor não encontrado")
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Autor não encontrado\"}")) })
     })
     @GetMapping("/{id}")
     public ResponseEntity<Autor> buscarPorId(@PathVariable Integer id) {
@@ -68,7 +75,11 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autor atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro de validação nos dados do autor"),
-            @ApiResponse(responseCode = "404", description = "Autor não encontrado")
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Autor não encontrado\"}")) })
     })
     @PutMapping("/{id}")
     public ResponseEntity<Autor> atualizar(@PathVariable Integer id, @Valid @RequestBody Autor autor) {

@@ -3,7 +3,10 @@ package br.csi.biblioteca.controller;
 import br.csi.biblioteca.model.usuario.DadosUsuario;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.UsuarioService;
-import io.swagger.v3.oas.annotations.Operation; 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse; 
 import io.swagger.v3.oas.annotations.responses.ApiResponses; 
 import io.swagger.v3.oas.annotations.tags.Tag; 
@@ -47,7 +50,11 @@ public class UsuarioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Erro de validação"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Usuário não encontrado\"}")) })
     })
     @PutMapping("/{id}")
     public ResponseEntity<DadosUsuario> atualizar(@PathVariable Integer id, @Valid @RequestBody Usuario usuario){   
@@ -60,7 +67,11 @@ public class UsuarioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso"),
             @ApiResponse(responseCode = "400", description = "Não foi possível excluir (ex: usuário possui empréstimos)"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Usuário não encontrado\"}")) })
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Integer id){   
@@ -80,7 +91,11 @@ public class UsuarioController {
     @Operation(summary = "Busca um usuário por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorDTO.class),
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Usuário não encontrado\"}")) })
     })
     @GetMapping("/{id}")
     public ResponseEntity<DadosUsuario> buscarPorId(@PathVariable Integer id){

@@ -37,22 +37,27 @@ public class Usuario implements UserDetails {
 
     @Email
     @Column(name = "email_us", unique = true, nullable = false)
+    @Schema(description = "Email único do usuário", example = "nome@email.com")
     private String emailUs;
 
     @NotBlank(message = "Insira uma senha")
     @Column(name = "senha_us", nullable = false)
+    @Schema(description = "Senha do usuário", example = "&$%gtS_&")
     private String senhaUs;
 
     @NotBlank(message = "O usuario deve ter nome")
     @Column(name = "nome_us", nullable = false)
+    @Schema(description = "Nome do usuário", example = "Ana Silva")
     private String nomeUs;
 
     @NotNull
     @Column(name = "ativo_us")
+    @Schema(description = "Identifica se o usuário está ativo", example = "true")
     private boolean ativoUs;
 
     @NotNull
     @Column(name = "permissao")
+    @Schema(description = "Identifica o nível de permissão do usuário", example = "USER")
     private String permissao;
 
 

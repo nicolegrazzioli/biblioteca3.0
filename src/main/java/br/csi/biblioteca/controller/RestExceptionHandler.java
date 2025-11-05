@@ -15,13 +15,14 @@ import java.util.Map;
 @RestControllerAdvice
 public class RestExceptionHandler {
     @ExceptionHandler(RecursoNaoEncontradoException.class)
-    public ResponseEntity<?> recursoNaoEncontrado(RecursoNaoEncontradoException e){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ResponseEntity<ApiErrorDTO> recursoNaoEncontrado(RecursoNaoEncontradoException e){
+//        ApiErrorDTO erro = new ApiErrorDTO(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorDTO(e.getMessage()));
     }
 
     @ExceptionHandler(RegraDeNegocioException.class)
     public ResponseEntity<?> regraDeNegocio(RegraDeNegocioException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiErrorDTO(e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -41,3 +42,5 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 }
+
+record ApiErrorDTO(String mensagem) {}

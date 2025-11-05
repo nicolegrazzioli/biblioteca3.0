@@ -48,7 +48,8 @@ Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários,
 
 
 ### Banco de dados
-![diagrama atualizado.png](diagrama atualizado.png)
+- diagrama Mermaid
+![diagrama - Mermaid.png](diagrama%20-%20Mermaid.png)
 **Tabelas**
 - usuario (tipo) - admin, usuario
 - usuario (permissao) - role_admin, role_usuario
