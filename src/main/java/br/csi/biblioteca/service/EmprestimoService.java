@@ -10,6 +10,7 @@ import br.csi.biblioteca.model.usuario.UsuarioRepository;
 import br.csi.biblioteca.service.exception.RecursoNaoEncontradoException;
 import br.csi.biblioteca.service.exception.RegraDeNegocioException;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +34,15 @@ public class EmprestimoService {
         this.emprestimoRepository = emprestimoRepository;
         this.livroRepository = livroRepository;
         this.usuarioRepository = usuarioRepository;
+    }
+
+    private Usuario getUsuarioAutenticado() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // verifica se eh uma instância de usuário
+        if (principal instanceof Usuario) {
+            return (Usuario) principal;
+        }
+        throw new RegraDeNegocioException("Usuário não autenticado corretamente");
     }
 
     //consulta
@@ -90,7 +100,14 @@ public class EmprestimoService {
 
     @Transactional
     public Emprestimo renovar(Integer id) {
+        Usuario uLogado = getUsuarioAutenticado();
         Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Empréstimo não encontrado"));
+
+        //verificia se o usuario eh admin ou o dono do emprestimo
+        if (!uLogado.getPermissao().equals("ROLE_ADMIN") && uLogado.getIdUs() != e.getUsuarioEmp().getIdUs()) {
+            throw new RegraDeNegocioException("Você só pode renovar seus próprios empréstimos");
+        }
+
         if (!e.getStatusEmp().equals("ATIVO")) {
             throw new RegraDeNegocioException("O empréstimo não pode ser renovado pois não está ativo");
         }
@@ -104,7 +121,14 @@ public class EmprestimoService {
 
     @Transactional
     public Emprestimo devolver(Integer id) {
+        Usuario uLogado = getUsuarioAutenticado();
         Emprestimo e = this.emprestimoRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Empréstimo não encontrado"));
+
+        //verificia se o usuario eh admin ou o dono do emprestimo
+        if (!uLogado.getPermissao().equals("ROLE_ADMIN") && uLogado.getIdUs() != e.getUsuarioEmp().getIdUs()) {
+            throw new RegraDeNegocioException("Você só pode devolver seus próprios empréstimos");
+        }
+
         if (!e.getStatusEmp().equals("ATIVO")) {
             throw new RegraDeNegocioException("O empréstimo não pode ser devolvido pois não está ativo");
         }

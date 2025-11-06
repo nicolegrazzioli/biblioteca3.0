@@ -4,6 +4,7 @@ import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.infra.security.TokenServiceJWT;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,21 +23,41 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
+
+record DadosAutenticacao(
+        @Schema(description = "Email do usuário", example = "admin@email.com") String login,
+        @Schema(description = "Senha do usuário", example = "admin123") String senha
+) {}
+record DadosToken(
+        @Schema(description = "Token JWT de autenticação", example = "eyJhbGciOiJIUzI1NiIsInR5cCI...") String token
+) {}
+
 @RestController
 @RequestMapping("/login")
 @AllArgsConstructor
-@Tag(name = "Login", description = "Path relacionado a operações de login")
+@Tag(name = "Login", description = "Operações de login: autenticação de usuários e geração de token JWT")
 public class AutenticacaoController {
     private final AuthenticationManager manager;
     private final TokenServiceJWT tokenService;
     private static final Logger logger = LoggerFactory.getLogger(AutenticacaoController.class);
 
-    @Operation(summary = "Fazer login", description = "Default") //descrição do endpoint
+
+    @Operation(summary = "Autenticação de usuário", description = "Autentica um usuário com email e senha e retorna um token JWT") //descrição do endpoint
     @ApiResponses(value = { //respostas possiveis que o endpoint pode retornar + descrição
-            @ApiResponse(responseCode = "200", description = "Login bem sucedido",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DadosToken.class))}), //tipo de retorno e formato do objeto
-            @ApiResponse(responseCode = "401", description = "Usuário ou senha incorretos"),
-            @ApiResponse(responseCode = "500", description = "Erro interno de processamento do login")
+            @ApiResponse(responseCode = "200", description = "Login bem-sucedido - retorna o token JWT",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DadosToken.class))),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas: usuário ou senha incorretos",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorDTO.class),
+                            examples = @ExampleObject(value = "{\"mensagem\": \"Usuário ou senha incorretos\"}")
+                    )),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorDTO.class),
+                            examples = @ExampleObject(value = "{\"mensagem\": \"Erro interno do servidor\"}")))
     })
     @PostMapping
     public ResponseEntity<?> login(@RequestBody DadosAutenticacao dados) {
@@ -45,7 +66,7 @@ public class AutenticacaoController {
             var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
             Authentication authentication = manager.authenticate(authenticationToken);
 
-            // Se a autenticação for bem-sucedida, o Spring retorna o objeto UserDetails (nosso Usuario)
+            // Se a autenticação for bem-sucedida, o Spring retorna o objeto UserDetails (Usuario)
             var usuario = (Usuario) authentication.getPrincipal();
             String token = tokenService.gerarToken(usuario);
 
@@ -62,7 +83,7 @@ public class AutenticacaoController {
 
     }
 
-    private record DadosAutenticacao(String login, String senha) {}
-    private record DadosToken(String token) {}
+//    private record DadosAutenticacao(String login, String senha) {}
+//    private record DadosToken(String token) {}
 
 }

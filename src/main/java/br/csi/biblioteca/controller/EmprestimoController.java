@@ -1,9 +1,12 @@
 package br.csi.biblioteca.controller;
 
+import br.csi.biblioteca.model.autor.Autor;
 import br.csi.biblioteca.model.emprestimo.Emprestimo;
+import br.csi.biblioteca.model.usuario.DadosUsuario;
 import br.csi.biblioteca.model.usuario.Usuario;
 import br.csi.biblioteca.service.EmprestimoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /** status
  * POST = 201 CREATED
@@ -28,7 +32,7 @@ import java.util.List;
 @RequestMapping("/emprestimos")
 @Tag(name = "Empréstimos", description = "Path relacionado aos empréstimos")
 public class EmprestimoController {
-    private EmprestimoService emprestimoService;
+    private final EmprestimoService emprestimoService;
     public EmprestimoController(EmprestimoService emprestimoService) {
         this.emprestimoService = emprestimoService;
     }
@@ -38,9 +42,19 @@ public class EmprestimoController {
     * ex: http://localhost:8080/biblioteca3.0/emprestimos?idUsuario=1 (admin)
     * ex: http://localhost:8080/biblioteca3.0/emprestimos?idUsuario=2 (usuario)
      */
-    @Operation(summary = "Lista os empréstimos")
+    @Operation(summary = "Lista os empréstimos",
+            description = "Se o usuário autenticado for ADMIN, lista todos os empréstimos; se for USUARIO, lista apenas os seus")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empréstimos encontrados com sucesso")
+            @ApiResponse(responseCode = "200", description = "Empréstimos encontrados com sucesso",
+                content = @Content(mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = Emprestimo.class)),
+                examples = @ExampleObject(
+                        name = "Exemplo de Lista de Empréstimos",
+                        value = "[{\"idEmp\":1,\"livroEmp\":{\"idLiv\":1,\"tituloLiv\":\"Harry Potter e a Pedra Filosofal\"},\"usuarioEmp\":{\"idUs\":2,\"nomeUs\":\"Ana Silva\"},\"dataEmprestimoEmp\":\"2025-09-10\",\"dataDevolucaoPrevistaEmp\":\"2025-09-24\",\"dataDevolucaoEfetivaEmp\":null,\"statusEmp\":\"ATIVO\"}," +
+                                "{\"idEmp\":2,\"livroEmp\":{\"idLiv\":2,\"tituloLiv\":\"1984\"},\"usuarioEmp\":{\"idUs\":3,\"nomeUs\":\"Bruno Costa\"},\"dataEmprestimoEmp\":\"2025-09-01\",\"dataDevolucaoPrevistaEmp\":\"2025-09-15\",\"dataDevolucaoEfetivaEmp\":null,\"statusEmp\":\"ATRASADO\"}]"
+                )
+    )),
+    @ApiResponse(responseCode = "403", description = "Acesso negado (requer autenticação)", content = @Content)
     })
     @GetMapping
     public ResponseEntity<List<Emprestimo>> listar(Authentication authentication) {
@@ -51,12 +65,16 @@ public class EmprestimoController {
 
     @Operation(summary = "Busca um empréstimo por ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empréstimo encontrado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Empréstimo encontrado com sucesso",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Emprestimo.class)) }),
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorDTO.class),
-                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) })
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) }),
+            @ApiResponse(responseCode = "403", description = "Acesso negado (requer autenticação)", content = @Content)
     })
     @GetMapping("/{id}")
     public ResponseEntity<Emprestimo> buscarPorId(@PathVariable Integer id) {
@@ -65,14 +83,21 @@ public class EmprestimoController {
     }
 
     /*RequestBody - pega o conteudo (json) e coloca numa variavel*/
-    @Operation(summary = "Criar um empréstimo")
+    @Operation(summary = "Registrar um empréstimo")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Empréstimo criado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Erro de validação nos dados do empréstimo")
+            @ApiResponse(responseCode = "201", description = "Empréstimo registrado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Emprestimo.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(oneOf = {ApiErrorDTO.class, Map.class}),
+                            examples = {
+                                    @ExampleObject(name = "Erro de Regra", value = "{\"mensagem\": \"O livro não está disponível: está emprestado\"}"),
+                                    @ExampleObject(name = "Erro de Validação", value = "{\"livroEmp\": \"não deve ser nulo\", \"usuarioEmp\": \"não deve ser nulo\"}")
+                            })),
     })
     @PostMapping("/registrar")
     public ResponseEntity<Emprestimo> salvar(@Valid @RequestBody EmprestimoDTO emprestimoDTO) {
-        // Apenas passe o DTO inteiro para o service
         Emprestimo novo = emprestimoService.criarEmprestimo(emprestimoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novo); //201
     }
@@ -80,13 +105,21 @@ public class EmprestimoController {
 
     @Operation(summary = "Devolver um empréstimo por ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empréstimo devolvido com sucesso"),
-            @ApiResponse(responseCode = "400", description = "O empréstimo não pode ser devolvido"),
+            @ApiResponse(responseCode = "200", description = "Empréstimo devolvido com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Emprestimo.class))),
+            @ApiResponse(responseCode = "400", description = "O empréstimo não pode ser devolvido",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(oneOf = {ApiErrorDTO.class, Map.class}),
+                            examples = {
+                                    @ExampleObject(name = "Erro de Regra", value = "{\"mensagem\": \"O empréstimo não pode ser devolvido pois não está ativo\"}"),
+                            })),
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorDTO.class),
-                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) })
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) }),
+            @ApiResponse(responseCode = "403", description = "Acesso negado (requer autenticação)", content = @Content)
     })
     @PutMapping("{id}/devolver")
     public ResponseEntity<Emprestimo> devolver(@PathVariable Integer id) {
@@ -96,12 +129,15 @@ public class EmprestimoController {
 
     @Operation(summary = "Renovar um empréstimo por ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empréstimo atualizado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Empréstimo renovado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Emprestimo.class))),
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado",
                     content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorDTO.class),
-                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) })
+                                    examples = @ExampleObject(value = "{\"mensagem\": \"Empréstimo não encontrado\"}")) }),
+            @ApiResponse(responseCode = "403", description = "Acesso negado (requer autenticação)", content = @Content)
     })
     @PutMapping("{id}/renovar")
     public ResponseEntity<Emprestimo> renovar(@PathVariable Integer id) {

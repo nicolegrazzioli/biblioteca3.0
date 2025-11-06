@@ -22,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/livros")
 @Tag(name = "Livros", description = "Operações de CRUD para Livros")
 public class LivroController {
-    private LivroService livroService;
+    private final LivroService livroService;
     public LivroController(LivroService livroService) {
         this.livroService = livroService;
     }
@@ -39,10 +39,6 @@ public class LivroController {
                                             "{\"idLiv\":2,\"tituloLiv\":\"1984\",\"isbnLiv\":\"978-8535914849\",\"anoPublicacaoLiv\":1949,\"disponivelLiv\":true,\"ativoLiv\":true,\"autores\":[{\"idAut\":2,\"nomeAut\":\"George Orwell\",\"nacionalidadeAut\":\"Britânico\",\"dataNascimentoAut\":\"1903-06-25\"}]}]"
                             )
                     )),
-            @ApiResponse(responseCode = "403", description = "Acesso negado (requer autenticação)",
-                    content = @Content(mediaType = "application/json",
-                    examples = @ExampleObject(value = "{\"mensagem\": \"Acesso negado\"}")
-            )),
     })
     @GetMapping
     public ResponseEntity<List<Livro>> listarAtivos() {
@@ -63,10 +59,6 @@ public class LivroController {
                             )
                     )
             ),
-            @ApiResponse(responseCode = "403", description = "Acesso negado (requer autenticação)",
-                    content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"mensagem\": \"Acesso negado\"}")
-                    )),
     })
     @GetMapping("/all")
     public ResponseEntity<List<Livro>> listarAll() {
@@ -134,6 +126,7 @@ public class LivroController {
 
             @ApiResponse(responseCode = "403", description = "Acesso negado (requer permissão de ADMIN)",
                     content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorDTO.class),
                             examples = @ExampleObject(value = "{\"mensagem\": \"Acesso negado\"}")
                     )),
 

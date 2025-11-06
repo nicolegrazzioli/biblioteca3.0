@@ -42,13 +42,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE).hasAuthority("ROLE_ADMIN")
 
                         //post e put em autores e livros - admin
-//                        .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/autores/**", "/livros/**").hasAuthority("ROLE_ADMIN")
-//                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USUARIO")
+                        .requestMatchers(HttpMethod.PUT, "/autores/**", "/livros/**").hasAnyAuthority("ROLE_ADMIN")
+
+                        // usuario autenticado
+                        .requestMatchers("/emprestimos/**", "/usuarios/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/autores/**", "/livros/**").authenticated()
+
+                        // nega outras reqs por padrão
+                        .anyRequest().denyAll()
 
                         //outras requisiçoes - usuario autenticado
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
                 )
                 //executar filtro de token antes do filtro de autenticação do spring
 //                .addFilterBefore(this.filtroToken, UsernamePasswordAuthenticationFilter.class)

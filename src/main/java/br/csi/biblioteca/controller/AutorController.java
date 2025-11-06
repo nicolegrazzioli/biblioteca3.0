@@ -1,8 +1,10 @@
 package br.csi.biblioteca.controller;
 
 import br.csi.biblioteca.model.autor.Autor;
+import br.csi.biblioteca.model.livro.Livro;
 import br.csi.biblioteca.service.AutorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,7 +28,7 @@ import java.util.List;
 @RequestMapping("/autores")
 @Tag(name = "Autores", description = "Path relacionado aos Autores")
 public class AutorController {
-    private AutorService service;
+    private final AutorService service;
     public AutorController(AutorService service) {
         this.service = service;
     }
@@ -34,7 +36,15 @@ public class AutorController {
 
     @Operation(summary = "Lista os autores")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Autores encontrados com sucesso")
+            @ApiResponse(responseCode = "200", description = "Lista de autores retornada com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Autor.class)),
+                            examples = @ExampleObject(
+                                    name = "Exemplo de Lista de Autores",
+                                    value = "[{\"idAut\":1,\"nomeAut\":\"J.K. Rowling\",\"nacionalidadeAut\":\"Britânica\",\"dataNascimentoAut\":\"1965-07-31\"}," +
+                                            "{\"idAut\":2,\"nomeAut\":\"George Orwell\",\"nacionalidadeAut\":\"Britânico\",\"dataNascimentoAut\":\"1903-06-25\"}]"
+                            )
+                    )),
     })
     @GetMapping
     public ResponseEntity<List<Autor>> listar() {
