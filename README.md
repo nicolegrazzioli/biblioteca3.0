@@ -31,7 +31,7 @@
 ----------------
 
 # Biblioteca 3.0
-> vídeo: 
+> vídeo: https://youtu.be/Q6V2Jbwqj-4  
 
 Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários, autores, livros e empréstimos: autenticação, cadastro, controle de acervo
 - Spring Boot - framework

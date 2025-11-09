@@ -44,7 +44,7 @@ collection:
         meta:
           id: req_1c43829ec0ad4bac946ea89f37572885
           created: 1761403245504
-          modified: 1761405576358
+          modified: 1762557955467
           isPrivate: false
           description: ""
           sortKey: -1761403245504
@@ -53,7 +53,7 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "tituloLiv": "novo",
+              "tituloLiv": "atualizar",
             	"isbnLiv": "11111111111",
             	"autoresIds": [
             		1
@@ -77,13 +77,13 @@ collection:
           rebuildPath: true
         pathParameters:
           - name: id
-            value: "6"
+            value: "1"
       - url: "{{ _.base_url }}/livros/:id"
         name: Exclui (soft delete) um livro por ID
         meta:
           id: req_1e89c889b9074fccb1d92bdbf0a27738
           created: 1761403245506
-          modified: 1761405678658
+          modified: 1762556773722
           isPrivate: false
           description: ""
           sortKey: -1761403245506
@@ -108,7 +108,7 @@ collection:
         meta:
           id: req_19264b30798049268d11d82e64ad22e5
           created: 1761403245518
-          modified: 1761405462054
+          modified: 1762629859188
           isPrivate: false
           description: ""
           sortKey: -1761403245518
@@ -117,11 +117,10 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "tituloLiv": "novo",
-              "isbnLiv": "1111111",
-              "anoPublicacaoLiv": 2020,
+              "isbnLiv": "56747899",
+              "anoPublicacaoLiv": 2024,
               "autoresIds": [
-                4
+                3, 4
               ]
             }
         headers:
@@ -145,7 +144,7 @@ collection:
         meta:
           id: req_d4193c3e92224f54b53b4d4923665825
           created: 1761403245525
-          modified: 1761405495643
+          modified: 1762556740441
           isPrivate: false
           description: ""
           sortKey: -1761403245525
@@ -167,7 +166,7 @@ collection:
         meta:
           id: req_8ee7c88c4c974595adc6d6fd2c904510
           created: 1761403245527
-          modified: 1761405352854
+          modified: 1762556737452
           isPrivate: false
           description: ""
           sortKey: -1761403245527
@@ -259,7 +258,7 @@ collection:
         meta:
           id: req_db840b227ba64a8b98d50ea6562d70af
           created: 1761403245501
-          modified: 1761404974115
+          modified: 1762624237101
           isPrivate: false
           description: ""
           sortKey: -1761403245501
@@ -278,13 +277,13 @@ collection:
           rebuildPath: true
         pathParameters:
           - name: id
-            value: "3"
+            value: "5"
       - url: "{{ _.base_url }}/usuarios/registrar"
         name: Registra um novo usuário
         meta:
           id: req_21614de6eebf438ca6b8ed531b61690b
           created: 1761403245515
-          modified: 1761405815004
+          modified: 1762626309330
           isPrivate: false
           description: ""
           sortKey: -1761403245515
@@ -320,7 +319,7 @@ collection:
         meta:
           id: req_bad89f2e5c1e4641b3b93876ffcc46ab
           created: 1761403245523
-          modified: 1761405102964
+          modified: 1762556906390
           isPrivate: false
           description: ""
           sortKey: -1761403245523
@@ -350,7 +349,7 @@ collection:
         meta:
           id: req_645925410e9246f98ed83ad6b4f7ceb1
           created: 1761403245517
-          modified: 1761406266958
+          modified: 1762624148566
           isPrivate: false
           description: Default
           sortKey: -1761403245517
@@ -387,7 +386,7 @@ collection:
         meta:
           id: req_93ff993f89414b91af5985b75f77f965
           created: 1761403245507
-          modified: 1761406209255
+          modified: 1762557931983
           isPrivate: false
           description: ""
           sortKey: -1761403245507
@@ -406,7 +405,7 @@ collection:
           rebuildPath: true
         pathParameters:
           - name: id
-            value: "4"
+            value: "5"
       - url: "{{ _.base_url }}/emprestimos/:id/devolver"
         name: Devolver um empréstimo por ID
         meta:
@@ -470,7 +469,7 @@ collection:
         meta:
           id: req_8bdf0ddb68e043b189e71fe30bac8bc0
           created: 1761403245528
-          modified: 1761405094842
+          modified: 1762556576476
           isPrivate: false
           description: ""
           sortKey: -1761403245528
@@ -612,7 +611,7 @@ collection:
         meta:
           id: req_658a8f8c86714d309a6108d4a25053d6
           created: 1761403245522
-          modified: 1761406761994
+          modified: 1762626340743
           isPrivate: false
           description: ""
           sortKey: -1761403245522
@@ -683,14 +682,14 @@ environments:
       meta:
         id: env_a9c00bf0feaf45a799377a0b5694ba09
         created: 1761403245479
-        modified: 1761406275968
+        modified: 1762624158577
         isPrivate: false
         sortKey: 1761403245479
       data:
         scheme: http
         base_path: /biblioteca3.0
         host: localhost:8080
-        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgQmlibGlvdGVjYSAzLjAiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJST0xFIjpbIlJPTEVfQURNSU4iXSwiZXhwIjoxNzYxNDEzNDY3fQ.8BkJg1SHAgKEaFK6EJUn2HXfi9fwzIL_14fSq4bN_Fc
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgQmlibGlvdGVjYSAzLjAiLCJzdWIiOiJhZG1pbkBlbWFpbC5jb20iLCJST0xFIjpbIlJPTEVfQURNSU4iXSwiZXhwIjoxNzYyNjMxMzUwfQ.lEaisiulS4L0jX0McBWPLw9o3yxi9nxkhC4GeZ8IqTc
 spec:
   contents:
     openapi: 3.0.1
