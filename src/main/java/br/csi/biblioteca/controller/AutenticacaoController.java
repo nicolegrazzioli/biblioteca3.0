@@ -61,6 +61,12 @@ public class AutenticacaoController {
     })
     @PostMapping
     public ResponseEntity<?> login(@RequestBody DadosAutenticacao dados) {
+        System.out.println("--- TENTATIVA DE LOGIN VIA FRONT ---");
+        System.out.println("Objeto recebido: " + dados);
+        System.out.println("Login recebido: '" + dados.login() + "'");
+        System.out.println("Senha recebida: '" + dados.senha() + "'");
+        System.out.println("------------------------------------");
+
         try {
 
             var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
