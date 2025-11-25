@@ -136,17 +136,20 @@ Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários,
 * Tratamento de Erros: Exceções específicas (`RecursoNaoEncontradoException`, `RegraDeNegocioException`) são lançadas pelos `Services` para erros específicos -- a classe `RestExceptionHandler` (`@RestControllerAdvice`) intercepta essas exceções e retorna respostas JSON com os status HTTP (`404 Not Found`, `400 Bad Request`)
 * DTOs: Classes DTO (`LivroDTO`, `EmprestimoDTO`, `DadosUsuario`, `DadosAutenticacao`) são utilizadas para "separar" a API das entidades internas e controlar o fluxo dos dados
 
-
+#### rodar pelo terminal
+```bash
+mvnw spring-boot:run
+``` 
 
 ### Autenticação 
-- POST http://localhost:8080/biblioteca3.0/login body (json) - login de admin (autorização total):
+- POST http://localhost:8081/biblioteca3.0/login body (json) - login de admin (autorização total):
 ```bash 
 {
 "login": "admin@email.com",
 "senha": "admin123"
 } 
 ```
-- request, ex: http://localhost:8080/biblioteca3.0/livros/all
+- request, ex: http://localhost:8081/biblioteca3.0/livros/all
 - Auth - bearer token: colar; prefix: "Bearer "
 
 #### Autorização

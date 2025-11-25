@@ -17,16 +17,18 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenServiceJWT {
-    //private final String KEY = "poo2";
+    // private final String KEY = "poo2";
     @Value("${jwt.secret}")
     private String KEY;
+
     public String gerarToken(Usuario user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(KEY); //palavra para descriptografar token
+            Algorithm algorithm = Algorithm.HMAC256(KEY); // palavra para descriptografar token
             return JWT.create()
                     .withIssuer("API Biblioteca 3.0")
                     .withSubject(user.getUsername())
                     .withClaim("ROLE", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                    .withClaim("id", user.getIdUs())
                     .withExpiresAt(dataExpiracao())
                     .sign(algorithm);
 
