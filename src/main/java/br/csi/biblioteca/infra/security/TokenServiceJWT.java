@@ -29,6 +29,7 @@ public class TokenServiceJWT {
                     .withSubject(user.getUsername())
                     .withClaim("ROLE", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                     .withClaim("id", user.getIdUs())
+                    .withClaim("nome", user.getNomeUs())
                     .withExpiresAt(dataExpiracao())
                     .sign(algorithm);
 
