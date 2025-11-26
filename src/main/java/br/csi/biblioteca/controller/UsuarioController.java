@@ -49,14 +49,30 @@ public class UsuarioController {
                 URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuarioSalvo.getIdUs()).toUri();
                 return ResponseEntity.created(uri).body(dadosUsuario);
         }
-    /*{
-  "emailUs": "teste@teste",
-  "senhaUs": "123",
-  "nomeUs": "teste",
-  "ativoUs": true,
-  "permissao": "ROLE_USUARIO"
-}*/
+        /*
+         * {
+         * "emailUs": "teste@teste",
+         * "senhaUs": "123",
+         * "nomeUs": "teste",
+         * "ativoUs": true,
+         * "permissao": "ROLE_USUARIO"
+         * }
+         */
 
+
+        @Operation(summary = "Busca um usuário por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso", 
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = DadosUsuarioCompleto.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", 
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDTO.class)))
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<DadosUsuarioCompleto> buscarPorId(@PathVariable Integer id){
+        Usuario usuario = service.getUsuarioById(id);
+        // Retorna DadosUsuarioCompleto para que o Front receba o 'nomeUs'
+        return ResponseEntity.ok(new DadosUsuarioCompleto(usuario));
+    }
 
         @Operation(summary = "Atualiza um usuário existente por ID")
         @ApiResponses(value = {
@@ -111,22 +127,6 @@ public class UsuarioController {
         }
 
         @Operation(summary = "Busca um usuário por ID")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso", content = {
-                                        @Content(mediaType = "application/json", schema = @Schema(implementation = DadosUsuario.class)) }),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = {
-                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorDTO.class), examples = @ExampleObject(value = "{\"mensagem\": \"Usuário não encontrado\"}")) })
-        })
-        @GetMapping("/{id}")
-        public ResponseEntity<DadosUsuario> buscarPorId(@PathVariable Integer id) {
-                Usuario u = service.getUsuarioById(id);
-                return ResponseEntity.ok(new DadosUsuario(u));
-        }
-
-        @Operation(summary = "Lista todos os usuários com dados completos (apenas admin)")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = DadosUsuarioCompleto.class))))
-        })
         @GetMapping("/complete")
         public ResponseEntity<List<DadosUsuarioCompleto>> listarTodosCompleto() {
                 return ResponseEntity.ok(service.listarTodosCompleto());
