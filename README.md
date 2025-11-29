@@ -138,7 +138,7 @@ Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários,
 
 #### rodar pelo terminal
 ```bash
-mvnw spring-boot:run
+.\mvnw spring-boot:run
 ``` 
 
 ### Autenticação 
