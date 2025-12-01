@@ -1,4 +1,6 @@
-### nome: "primeira_entrega"
+
+Frontend: https://github.com/nicolegrazzioli/front-avaliadordeprojetos/tree/segunda_entrega
+
 #### atualizações:
 
 - [x] arquivo .pdf com um descritivo do projeto (1)
@@ -31,7 +33,6 @@
 ----------------
 
 # Biblioteca 3.0
-> vídeo: https://youtu.be/Q6V2Jbwqj-4  
 
 Sistema de gerenciamento para uma biblioteca (backend) com gestão de usuários, autores, livros e empréstimos: autenticação, cadastro, controle de acervo
 - Spring Boot - framework
